@@ -1,0 +1,56 @@
+.logo {
+  height: 6rem;
+  padding: 1rem;
+  border-radius: 50%;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em var(--fg-primary));
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  height: 8rem;
+  width: 100%;
+  /* border: 1px solid red; */
+  background-color: var(--bg-secondary);
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  left: 0;
+}
+
+.company-info {
+  display: flex;
+}
+
+.company-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.company-name {
+  margin-bottom: 0;
+}
+
+.company-slogan {
+  margin-top: 0;
+} 
+
+nav {
+  margin: 10px;
+  width: 7rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1rem;
+}
+
+.chart-container {
+  width: 40rem;
+  /* height: 40rem; */
+}

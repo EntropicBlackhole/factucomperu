@@ -14,8 +14,7 @@ import Products from './pages/Products'
 import Workers from './pages/Workers'
 
 import Dashboard from './pages/Dashboard'
-import LoggedInLayout from './LoggedInLayout'
-import LoggedOutLayout from './LoggedOutLayout'
+import PrimaryLayout from './PrimaryLayout'
 import './App.css'
 
 
@@ -24,7 +23,7 @@ function App() {
   const PrimaryRouter = createBrowserRouter([
     {
       path: "/",
-      element: <LoggedOutLayout />,
+      element: <PrimaryLayout />,
       children: [
       {
           path: "/",

@@ -1,6 +1,13 @@
 import LineChart from '../components/LineChart'
+import Chart from "chart.js/auto";
+import { Data } from "../utils/Data";
+import { CategoryScale } from "chart.js";
+import { useState } from "react";
 Chart.register(CategoryScale);
-const [chartData, setChartData] = useState({
+
+
+const Dashboard = () => {
+  const [chartData, setChartData] = useState({
     labels: Data.map((data) => data.day), 
     datasets: [
       {
@@ -18,11 +25,10 @@ const [chartData, setChartData] = useState({
     ]
   });
 
-const Dashboard = () => {
     return (
         <>
             <div className="left-half">
-                <Graph />
+                <LineChart className="line-chart" chartData={chartData}/>
                 <div className="monthly-sales">
                     <div>Cantidad de ventas</div>
                     <div>Cantidad de productos</div>

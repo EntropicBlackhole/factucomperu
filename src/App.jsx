@@ -1,8 +1,8 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import Chart from "chart.js/auto";
-import { CategoryScale } from "chart.js";
-import { useState } from "react";
-import { Data } from "./utils/Data";
+// import Chart from "chart.js/auto";
+// import { CategoryScale } from "chart.js";
+// import { useState } from "react";
+// import { Data } from "./utils/Data";
 
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -11,10 +11,11 @@ import Register from './pages/Register'
 import Sales from './pages/Sales'
 import Sell from './pages/Sell'
 import Products from './pages/Products'
-import Customers from './pages/Customers'
+import Workers from './pages/Workers'
 
 import Dashboard from './pages/Dashboard'
-import PrimaryLayout from './PrimaryLayout'
+import LoggedInLayout from './LoggedInLayout'
+import LoggedOutLayout from './LoggedOutLayout'
 import './App.css'
 
 
@@ -23,7 +24,7 @@ function App() {
   const PrimaryRouter = createBrowserRouter([
     {
       path: "/",
-      element: <PrimaryLayout />,
+      element: <LoggedOutLayout />,
       children: [
       {
           path: "/",
@@ -50,8 +51,8 @@ function App() {
           element: <Products />
         },
         {
-          path: "/clientes",
-          element: <Customers />
+          path: "/trabajadores",
+          element: <Workers />
         },
         {
           path: "/vender",

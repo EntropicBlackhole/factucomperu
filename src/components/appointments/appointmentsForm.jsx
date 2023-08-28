@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-const appointmentList = (onSaveAppointment) => {
-    const {form, setForm} = useState({
+const appointmentsForm = (onSaveAppointment, appointment) => {
+    const {INITIAL_FORM_STATE} = useState({
         cod: '',
         class:'',
         description:'',
@@ -12,15 +12,23 @@ const appointmentList = (onSaveAppointment) => {
         purchprice:''    
     })
 
-    const handleChange = (event) => {
-        //const name = event.target.name
-        //const value = event.target.value
+    const handleChange = (event) => {        
         const [name, value] = event.target
-        setForm({
-            ...form,
-            [name]: value
-        })
+        setForm({...form,[name]: value})
     }
+
+    const handleSaveAppointment = (e) => {
+        e.preventDefault()
+    
+        const newAppointment = {
+          ...form,
+          id: crypto.randomUUID()
+        }
+    
+        onSaveAppointment(newAppointment)
+    
+        setForm(INITIAL_FORM_STATE)
+      }
 
     return (
         <>

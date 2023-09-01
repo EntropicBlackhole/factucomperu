@@ -215,9 +215,11 @@ nav {
 .datacard-ventas {
   background-color: rgb(56, 56, 255);
 }
+
 .datacard-productos {
   background-color: rgb(161, 13, 161);
 }
+
 .datacard-ganancia {
   background-color: rgb(21, 170, 21);
 }
@@ -302,6 +304,7 @@ nav {
   padding: 0;
   font-size: 1rem;
 }
+
 .online-employees-list {
   /* margin-top: 1rem; */
   margin: .4rem;
@@ -312,6 +315,7 @@ nav {
   list-style: none;
   /* border: 1px solid red; */
 }
+
 /* dashboard */
 
 
@@ -382,18 +386,61 @@ nav {
   border: 1px solid var(--fg-primary);
   padding: .5rem;
 }
+
 .listaVenta {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
   padding-left: 30px;
   padding-right: 30px;
   margin-top: 100px;
-  justify-content: center;
+  align-items: center;
   gap: 20px;
 }
 
-.listaVenta--head {
+.listaVenta--titulos {
+  display: flex;
+  flex-direction: row;
+  gap: 36px;
+}
+
+.listaVentas--productos {
+  display: flex;
+  flex-direction: row;
+  gap: 37px;
+  width: 644px;
+  align-items: center;
+}
+
+.nombre {
+  width: 149px;
+}
+
+.precio {
+  width: 136px;
+}
+
+.cantidad {
+  width: 79px;
+}
+
+.cantidad--input {
+  width: 79px;
+}
+
+.descuento {
+  width: 93px;
+}
+
+.cantidad--input {
+  width: 93px;
+}
+
+.total {
+  width: 44px;
+}
+
+.listaVentas--head {
   display: flex;
   flex-direction: column;
 }

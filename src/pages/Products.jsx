@@ -3,7 +3,6 @@ import AppointmentsForm from "../components/ModuloProducto/productoForm"
 import AppointmentsList from "../components/ModuloProducto/productoList"
 import Header from "../components/Header"
 
-
 const Products = () => {
    const [appointment,setAppointments] = useState([])
     const [appointmentSelected, setAppointmentSelected] = useState({})

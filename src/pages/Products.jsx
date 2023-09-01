@@ -26,8 +26,7 @@ const Products = () => {
     
 
     return (
-        <>
-            <>            
+        <>          
             <AppointmentsForm
             onSaveAppointment={handleSaveAppointment}
             appointment={appointmentSelected}/>
@@ -36,7 +35,6 @@ const Products = () => {
             appointments={appointments}
             onRemove={handleRemove}
             onEdit={handleEdit}/>
-        </>
         </>
     )   
 }

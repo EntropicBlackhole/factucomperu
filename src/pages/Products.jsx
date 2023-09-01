@@ -4,7 +4,7 @@ import AppointmentsList from "../components/ModuloProducto/productoList"
 import Header from "../components/Header"
 
 const Products = () => {
-   const [appointment,setAppointments] = useState([])
+   const [appointments,setAppointments] = useState([])
     const [appointmentSelected, setAppointmentSelected] = useState({})
 
     const handleSaveAppointment = (form) => {

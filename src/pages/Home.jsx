@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 
-const Home = () => {
-  
+function Home() {
     return (
       <>
         <p>Home page</p>

@@ -1,7 +1,11 @@
+<<<<<<< HEAD
 import { useState } from "react"
 import AppointmentsForm from "../components/ModuloProducto/productoForm"
 import AppointmentsList from "../components/ModuloProducto/productoList"
 import Header from "../components/Header"
+=======
+import Header from '../components/Header'
+>>>>>>> 6b479de1f6736a88f1a33a71334301427fcbb0a7
 
 const Products = () => {
    const [appointments,setAppointments] = useState([])
@@ -26,6 +30,7 @@ const Products = () => {
     
 
     return (
+<<<<<<< HEAD
         <>            
             <AppointmentsForm
             onSaveAppointment={handleSaveAppointment}
@@ -37,6 +42,13 @@ const Products = () => {
             onEdit={handleEdit}/>
         </>
     )   
+=======
+        <>
+            <Header />
+            {/* Tu codigo aca abajo */}
+        </>
+    )
+>>>>>>> 6b479de1f6736a88f1a33a71334301427fcbb0a7
 }
 
 export default Products

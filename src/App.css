@@ -1,3 +1,11 @@
+.layout-wrapper {
+  width: 100%;
+  display: flex;
+  /* align-items: center; */
+  flex-direction: column;
+  justify-content: center;
+}
+
 /* header */
 
 .logo {
@@ -17,13 +25,10 @@ header {
   display: flex;
   flex-direction: row;
   height: 5.5em;
-  width: 100%;
-  /* border: 1px solid red; */
   background-color: var(--bg-secondary);
   justify-content: space-between;
   align-items: center;
-  position: absolute;
-  left: 0;
+  width: 100%;
 }
 
 .company-info {
@@ -56,6 +61,7 @@ nav {
 }
 /* header */
 
+<<<<<<< HEAD
 .loggedin-main {
   margin-top: 5.5rem;
   /* position: absolute; */
@@ -81,6 +87,9 @@ nav {
   justify-content: center;
   /* border: 1px solid red */
 }
+=======
+
+>>>>>>> 6b479de1f6736a88f1a33a71334301427fcbb0a7
 
 /* login */
 .login-wrapper {

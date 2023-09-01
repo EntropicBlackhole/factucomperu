@@ -3,6 +3,9 @@ import Chart from "chart.js/auto";
 import { Data } from "../utils/Data";
 import { CategoryScale } from "chart.js";
 import { useState } from "react";
+import Header from "../components/Header"
+
+
 Chart.register(CategoryScale);
 
 
@@ -11,7 +14,6 @@ const Dashboard = () => {
     labels: Data.map((data) => data.day), 
     datasets: [
       {
-        label: "a",
         data: Data.map((data) => data.net_sell),
         backgroundColor: [
           "rgba(75,192,192,1)",
@@ -25,22 +27,23 @@ const Dashboard = () => {
     ]
   });
 
-    return (
-        <>
-            <div className="left-half">
-                <LineChart className="line-chart" chartData={chartData}/>
-                <div className="monthly-sales">
-                    <div>Cantidad de ventas</div>
-                    <div>Cantidad de productos</div>
-                    <div>Ganancia neta</div>
-                </div>
+  return (
+    <>
+      <Header />
+        <div className="left-half">
+            <LineChart className="line-chart" chartData={chartData}/>
+            <div className="monthly-sales">
+                <div>Cantidad de ventas</div>
+                <div>Cantidad de productos</div>
+                <div>Ganancia neta</div>
             </div>
-            <div className="right-half">
-                <div className="todo-list"></div>
-                <div className="online-employees">  </div>
-            </div>
-        </>
-    )
+        </div>
+        <div className="right-half">
+            <div className="todo-list"></div>
+            <div className="online-employees">  </div>
+        </div>
+    </>
+  )
 }
 
 export default Dashboard

@@ -1,6 +1,11 @@
+import Header from '../components/Header'
+
 const Sell = () => {
     return (
-        <></>
+        <>
+            <Header />  
+            {/* Tu codigo aca abajo */}
+        </>
     )
 }
 

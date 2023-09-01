@@ -49,7 +49,7 @@ header {
 
 .company-slogan {
   margin-top: 0;
-} 
+}
 
 nav {
   margin: 10px;
@@ -59,9 +59,34 @@ nav {
   grid-template-rows: 1fr 1fr;
   gap: 0.1rem;
 }
+
 /* header */
 
+.loggedin-main {
+  margin-top: 5.5rem;
+  /* position: absolute; */
+  left: 0;
+  width: 100%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  /* border: 1px solid red */
+}
 
+.loggedout-main {
+  /* position: absolute; */
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  /* border: 1px solid red */
+}
 
 /* login */
 .login-wrapper {
@@ -99,6 +124,7 @@ nav {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 /* login */
 
 
@@ -138,6 +164,7 @@ nav {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 /* register */
 
 /* dashboard */
@@ -354,4 +381,26 @@ nav {
   /* margin: 1rem; */
   border: 1px solid var(--fg-primary);
   padding: .5rem;
+}
+.listaVenta {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding-left: 30px;
+  padding-right: 30px;
+  margin-top: 100px;
+  justify-content: center;
+  gap: 20px;
+}
+
+.listaVenta--head {
+  display: flex;
+  flex-direction: column;
+}
+
+.plop {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-end;
+  background-color: inherit;
 }

@@ -33,12 +33,9 @@ const Sales = () => {
 				</form>
 			</div>
 			<div className="separator"></div>
-			<Table data={Data} type="ventas" className="sales-table"/>
+			<Table data={Data} type="ventas" className="sales-table" />
 		</>
 	);
 };
 
 export default Sales;
-
-
-

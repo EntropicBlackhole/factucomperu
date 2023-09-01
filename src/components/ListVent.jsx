@@ -2,9 +2,6 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 const ListVent = ({ newList }) => {
 
-    const [nombre, setNombre] = useState()
-    const [product, setProducts] = useState()
-
     const Productos = [
         {
             "id": "1",
@@ -38,17 +35,19 @@ const ListVent = ({ newList }) => {
 
     const search = (event) => {
         const name = event.target.value
-        setNombre(name)
-    }
-    const newProduct = Productos.filter(producto => {
-        if (producto.name == nombre) {
-            return producto
+        // setNombre(name)
+        const newProduct = Productos.filter(producto => {
+            if (producto.name == name) {
+                return producto
+            }
+        })
+        if (newProduct.length == 1) {
+            const sendProduct = newProduct
+            newList(sendProduct)
         }
-    })
-    if (newProduct.length == 1) {
-        const sendProduct = newProduct[0]
-        newList(sendProduct)
+        console.log("search")
     }
+
 
     return (
         <>

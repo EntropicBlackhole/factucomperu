@@ -8,22 +8,18 @@ const Sales = () => {
     const [productos, setProducts] = useState([])
 
     const list = (newProducts) => {
-        console.log(newProducts)
-    }
-    const plop = (event) => {
-
-
+        setProducts(newProducts)
     }
 
 
     return (
         <>
             <ListVent newList={list} />
-            {/* <button onClick={plop}>
-                Buscar
-            </button> */}
-            <Render />
+            {productos.map(producto => {
+                return <Render selectProduct={producto} />
+            })}
 
+            {/* {JSON.stringify(productos)} */}
             {/* <h1>{productos.name}</h1> */}
         </>
     )

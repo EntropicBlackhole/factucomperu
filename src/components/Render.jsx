@@ -14,11 +14,11 @@ export const Render = ({ selectProduct }) => {
             <section className="listaVenta">
                 <div>
                     <h3>Nombre/Modelo</h3>
-                    <span></span>
+                    <span>{selectProduct.name}</span>
                 </div>
                 <div>
                     <h3>Precio de venta</h3>
-                    <span></span>
+                    <span>{selectProduct.sell_price}</span>
                 </div>
 
                 <div>

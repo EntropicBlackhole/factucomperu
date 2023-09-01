@@ -1,12 +1,8 @@
-import { useState } from "react"
-
 const Products = () => {
 
 
     return (
-        <>
-
-        </>
+        <></>
     )
 }
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import Header from "../Header"
 
 const AppointmentsForm = (onSaveAppointment, appointment) => {
     const {INITIAL_FORM_STATE} = useState({
@@ -38,7 +39,7 @@ const AppointmentsForm = (onSaveAppointment, appointment) => {
 
     return (
         <>
-            <main><Header/></main>            
+            {/* <main><Header/></main>             */}
             <section className='BuscarProducto'>
                 <form action="" onSubmit={handleSaveAppointment}>
                     <h3>Buscar Productos</h3>
@@ -61,10 +62,11 @@ const AppointmentsForm = (onSaveAppointment, appointment) => {
                     <p>Stock: 
                         <input type="text" name='amt' placeholder='Stock' onChange={handleChange} />
                     </p>
-                    <button type="submit" value="Guardar">Guardar</button>
-                    <button>+Nuevo</button>
+                    <input type="submit" value="Guardar" />
+                    <input type="submit" value="+Nuevo" />
+                    
                 </form>
-                {JSON.stringify(form)}
+                <pre>{JSON.stringify(form,null,2)}</pre>
             </section>
         </>
     )

@@ -1,8 +1,10 @@
 import { useState } from "react"
 import AppointmentsForm from "../components/ModuloProducto/productoForm"
+import AppointmentsList from "../components/ModuloProducto/productoList"
+import Header from "../components/Header"
 
 const Products = () => {
-   const [appointment,setAppointments] = useState([])
+   const [appointments,setAppointments] = useState([])
     const [appointmentSelected, setAppointmentSelected] = useState({})
 
     const handleSaveAppointment = (form) => {
@@ -24,8 +26,15 @@ const Products = () => {
     
 
     return (
-        <>
-            <AppointmentsForm/>
+        <>            
+            <AppointmentsForm
+            onSaveAppointment={handleSaveAppointment}
+            appointment={appointmentSelected}/>
+
+            <AppointmentsList
+            appointments={appointments}
+            onRemove={handleRemove}
+            onEdit={handleEdit}/>
         </>
     )   
 }

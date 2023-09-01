@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 const ListVent = ({ newList }) => {
 
+    const [selectOp, setOption] = useState()
+
     const Productos = [
         {
             "id": "1",
@@ -10,7 +12,8 @@ const ListVent = ({ newList }) => {
             "model": "103",
             "bought_price": "10",
             "sell_price": "20",
-            "amt": "0"
+            "amt": "0",
+            "total": "0"
         },
         {
             "id": "2",
@@ -19,7 +22,8 @@ const ListVent = ({ newList }) => {
             "model": "104",
             "bought_price": "15",
             "sell_price": "18",
-            "amt": "0"
+            "amt": "0",
+            "total": "0"
         },
         {
             "id": "3",
@@ -28,14 +32,15 @@ const ListVent = ({ newList }) => {
             "model": "105",
             "bought_price": "5",
             "sell_price": "10",
-            "amt": "0"
+            "amt": "0",
+            "total": "0"
         }
 
     ]
 
     const search = (event) => {
         const name = event.target.value
-        // setNombre(name)
+        // console.log(name)
         const newProduct = Productos.filter(producto => {
             if (producto.name == name) {
                 return producto
@@ -45,7 +50,11 @@ const ListVent = ({ newList }) => {
             const sendProduct = newProduct
             newList(sendProduct)
         }
-        console.log("search")
+        // console.log("search")
+    }
+    const options = (event) => {
+        const option = event.target.value
+        setOption(option)
     }
 
 
@@ -54,6 +63,16 @@ const ListVent = ({ newList }) => {
             <div>
                 <label htmlFor="">Buscar</label>
                 <input type="text" onChange={search} />
+                <select name="" id="" onChange={options}>
+                    <option value="">--Guia de inventario--</option>
+                    {Productos.map(producto => {
+                        return (
+                            <>
+                                <option value={producto.name} >{producto.name}</option>
+                            </>
+                        )
+                    })}
+                </select>
             </div>
         </>
     )

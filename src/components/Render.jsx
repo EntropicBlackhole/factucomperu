@@ -16,6 +16,9 @@ export const Render = ({ selectProduct }) => {
     if (selectProduct.total == 0) {
         selectProduct.total = total
     }
+    else {
+        selectProduct.total = 0
+    }
 
     const desc = (event) => {
         const descuento = event.target.value

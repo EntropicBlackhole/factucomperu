@@ -1,28 +1,33 @@
-// import { Link } from 'react-router-dom'
-import Header from '../components/Header'
-import appointmentsForm from "../components/appointments/AppointmentsForm"
-// import appointmentsList from "../components/appointments/appointmentsList"
-import { useState } from 'react'
+import { useState } from "react"
+import AppointmentsForm from "../components/ModuloProducto/productoForm"
 
 const Products = () => {
-    const [appointment,setAppointments] = useState([])
+   const [appointment,setAppointments] = useState([])
     const [appointmentSelected, setAppointmentSelected] = useState({})
 
-    const handleSaveAppointment = () => { }
+    const handleSaveAppointment = (form) => {
+        setAppointments([...appointments, form])
+    }
+
+    const handleRemove = (id) => {
+        const newAppointments = appointments.filter(
+          appointment => appointment.id !== id
+        )
+    
+        setAppointments(newAppointments)
+    }
+    
+    const handleEdit = (appointment) => {
+        setAppointmentSelected(appointment)
+    } 
+
+    
 
     return (
         <>
-          <appointmentsForm
-            onSaveAppointment="handleSaveAppointment"
-            appointment={appointmentSelected}
-          />
-    
-          {/* Aqui va la lista */}
+            <AppointmentsForm/>
         </>
-    )
-            
-        
-    
+    )   
 }
 
 export default Products

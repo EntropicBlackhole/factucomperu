@@ -2,14 +2,14 @@ import { useEffect, useState } from "react"
 import Header from "../Header"
 
 const AppointmentsForm = (onSaveAppointment, appointment) => {
-    const {INITIAL_FORM_STATE} = useState({
+    const INITIAL_FORM_STATE = {
         name: '',
         brand:'',
         model:'',
         bought_price:'',
         sell_price:'',
         amt:''            
-    })
+    }
 
     const [form, setForm] = useState(INITIAL_FORM_STATE)
 
@@ -20,7 +20,7 @@ const AppointmentsForm = (onSaveAppointment, appointment) => {
     }, [appointment])
 
     const handleChange = (event) => {        
-        const [name, value] = event.target
+        const {name, value} = event.target
         setForm({...form,[name]: value})
     }
 

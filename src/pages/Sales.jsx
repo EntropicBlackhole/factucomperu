@@ -1,13 +1,102 @@
 import Header from "../components/Header";
-import Data from "../ventas.json";
+import ventaData from "../ventas.json";
 import Table from "../components/Table";
+import { useState, useEffect } from "react";
 const Sales = () => {
+	const [data, setData] = useState(convertData(ventaData, "ventas"));
+
+	function searchVentas(event) {
+		event.preventDefault();
+		let date =
+			event.target[0].value == ""
+				? event.target[0].value
+				: `${event.target[0].value.split("-")[1]}/${
+				event.target[0].value.split("-")[2]
+				}/${event.target[0].value.split("-")[0]}`;
+		// console.log(`"${date}"`);
+		let client = event.target[1].value;
+		let cashier = event.target[2].value;
+		let note = event.target[3].value;
+		let serie = event.target[4].value;
+		// console.log(ventaData)
+		let ventas = convertData(ventaData, "itemList");
+		// console.log(ventas)
+		// console.log(ventas)
+		// let newData = filterData(ventas, { date, client, cashier, note, serie });
+		// console.log(newData)
+		setData(filterData(ventas, { date, client, cashier, note, serie }));
+	}
+
+	function convertData(data, type) {
+		let arrayedData = [];
+		for (let info in data) {
+			if (type == "ventas") {
+				let newObject = { serie: info };
+
+				let date = new Date(data[info].date);
+
+				newObject.date = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
+				newObject.client = data[info].client;
+
+				let totalSale = 0;
+				for (let product in data[info].products) {
+					totalSale +=
+						data[info].products[product].amt *
+							data[info].products[product].unit_price -
+						data[info].products[product].discount;
+				}
+				newObject.totalSale = totalSale;
+				arrayedData.push(newObject);
+			} else if (type == "itemList") {
+				let newObject = { serie: info };
+
+				let date = new Date(data[info].date);
+
+				newObject.date = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
+				newObject.client = data[info].client;
+				newObject.cashier = data[info].cashier;
+				newObject.note = data[info].note;
+				let totalSale = 0;
+				for (let product in data[info].products) {
+					totalSale +=
+						data[info].products[product].amt *
+							data[info].products[product].unit_price -
+						data[info].products[product].discount;
+				}
+				newObject.totalSale = totalSale.toString();
+				arrayedData.push(newObject);
+			}
+		}
+		return arrayedData;
+	}
+
+	function filterData(data, inputs) {
+		let returnArray = [];
+		for (let piece of data) {
+			let unjoinedStatements = [];
+			// console.log("piece = ", piece);
+			for (let key in piece) {
+				if (inputs[key] == undefined) inputs[key] = "";
+				unjoinedStatements.push(`piece.${key}.includes(inputs.${key})`);
+				// console.log(`"${inputs[key]}"`, key);
+			}
+			// console.log(unjoinedStatements);
+			eval(`if (${unjoinedStatements.join(" && ")}) returnArray.push(piece);`);
+		}
+		// console.log(returnArray)
+		return returnArray;
+	}
 	return (
 		<>
 			<Header />
 			<div>
-				<form className="search-form">
-					<input type="date" className="search-input" name="date"></input>
+				<form className="search-form" onSubmit={searchVentas}>
+					<input
+						type="date"
+						className="search-input"
+						name="date"
+						placeholder="dd/mm/yyyy"
+						format="dd/mm/yyyy"></input>
 					<input
 						type="text"
 						className="search-input"
@@ -33,7 +122,7 @@ const Sales = () => {
 				</form>
 			</div>
 			<div className="separator"></div>
-			<Table data={Data} type="ventas" className="sales-table" />
+			<Table data={data} type="ventas" className="sales-table" />
 		</>
 	);
 };

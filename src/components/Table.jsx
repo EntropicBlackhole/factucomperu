@@ -1,7 +1,12 @@
 import ButtonIcon from '../components/ButtonIcon'
+// import { useState } from 'react';
+
 
 function Table(data) {
-	let tableData = convertData(data.data, data.type);
+
+	let tableData = data.data;
+	// console.log(tableData)
+	data.type == "ventas"
 	if (data.type == "ventas") {
 		return (
 			<table className="table">
@@ -23,9 +28,9 @@ function Table(data) {
 								<td className="table-data">{item.date}</td>
 								<td className="table-data">{item.totalSale}</td>
 								<td className="table-data">
-									<ButtonIcon icon="./src/assets/icons/print.svg" />{" "}
+									<ButtonIcon icon="./src/assets/icons/print.svg" />
 									{/* This will open a new window with the pdf thing */}
-									<ButtonIcon icon="./src/assets/icons/trash.svg" />{" "}
+									<ButtonIcon icon="./src/assets/icons/trash.svg" />
 									{/* This will delete the thing but first asking for confirmation*/}
 								</td>
 							</tr>
@@ -38,44 +43,3 @@ function Table(data) {
 }
 
 export default Table;
-
-//Search will have:
-//Date
-//Client
-//Cashier
-//Products
-//Note
-//ID
-
-// These will work as inputs and the serach button as a submit
-
-//Serie
-//Date
-//Cliente
-//Monto
-//Botones
-
-function convertData(data, type) {
-	let arrayedData = [];
-	for (let info in data) {
-		if (type == "ventas") {
-			let newObject = { serie: info };
-
-			let date = new Date(data[info].date);
-
-			newObject.date = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
-			newObject.client = data[info].client;
-
-			let totalSale = 0;
-			for (let product in data[info].products) {
-				totalSale +=
-					data[info].products[product].amt *
-						data[info].products[product].unit_price -
-					data[info].products[product].discount;
-			}
-			newObject.totalSale = totalSale;
-			arrayedData.push(newObject);
-		}
-	}
-	return arrayedData;
-}

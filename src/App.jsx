@@ -3,6 +3,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Settings from './pages/Settings'
 
 import Sales from './pages/Sales'
 import Sell from './pages/Sell'
@@ -47,6 +48,10 @@ function App() {
         {
           path: "/vender",
           element: <Sell />
+        },
+        {
+          path: "/configuracion",
+          element: <Settings />
         }
       ]
     }

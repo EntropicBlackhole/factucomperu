@@ -7,11 +7,17 @@ const Register = () => {
                 <img src="../../fcp.svg" className="register-logo"></img>
                 <h2>Acceso al sistema</h2>
                 <form className="register-form">
-                    <input type="text" className="register-companyName register-input" placeholder="Nombre de empresa"></input>
+                    <label className="register-label">Nombre de la empresa</label>
+                    <input type="text" className="register-companyName register-input" placeholder="Nombre"></input>
+                    <label className="register-label">Correo del dueño de la empresa</label>
                     <input type="text" className="register-ownerEmail register-input email" placeholder="Correo"></input>
+                    <label className="register-label">Contraseña para la cuenta</label>
                     <input type="password" className="register-ownerPassword register-input password" placeholder="Contraseña"></input>
+                    <label className="register-label">Confirmar contraseña</label>
                     <input type="password" className="register-ownerPasswordConfirm register-input password" placeholder="Confirmar contraseña"></input>
-                    <input type="text" className="register-ownerUsername register-input" placeholder="Nombre de usuario (del(a) dueñ@"></input>
+                    <label className="register-label">Nombre de usuario del(a) duen@</label>
+                    <input type="text" className="register-ownerUsername register-input" placeholder="Nombre de usuario"></input>
+                    <label className="register-label">Logo de la empresa</label>
                     <input type="file" className="register-companyLogo register-input" placeholder="Logo de la empresa"></input>
                     <input type="submit" className="register-button register-input" value="Crear Empresa"></input>
                 </form>

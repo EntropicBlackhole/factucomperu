@@ -72,8 +72,9 @@ const Dashboard = () => {
               <div className='online-employees-title'>Online Employees</div>
             </div>
             <ul className="online-employees-list">
-                <li className="employee-item">Aa</li>
-                <li className="employee-item">Aa</li>
+                <li className="employee-item">Tobias Abregu</li>
+                <li className="employee-item">Mario Huamani</li>
+                <li className="employee-item">Christopher Acosta</li>
               </ul>
             </div>
           </div>

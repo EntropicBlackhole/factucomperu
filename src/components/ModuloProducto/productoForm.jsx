@@ -37,6 +37,16 @@ const AppointmentsForm = (onSaveAppointment, appointment) => {
         setForm(INITIAL_FORM_STATE)
       }
 
+    function filterProd(INITIAL_FORM_STATE,inputs) {
+        let rArray= [];
+        for (let piece of INITIAL_FORM_STATE) {
+            let unjoinedStatements = [];
+            for (let key in piece) unjoinedStatements.push(`piece.${key}.includes(inputs.${key})`);
+            eval(`if (${unjoinedStatements.join(" && ")}) rArray.push(piece);`)
+        }
+        return rArray;
+    }
+
     return (
         <>{/* <main><Header/></main>             */}
             <section className='BuscarProducto'>
@@ -63,6 +73,8 @@ const AppointmentsForm = (onSaveAppointment, appointment) => {
                     </p>
                     <input type="submit" value="Guardar" />
                     <input type="submit" value="+Nuevo" />
+                    
+                    
                     
                 </form>
                 <pre>{JSON.stringify(form,null,2)}</pre>

@@ -13,17 +13,19 @@ const Sell = () => {
 
 
     return (
-        <>
-            <Header />
-            <ListVent newList={list} />
-            {productos.map(producto => {
-                return <Render selectProduct={producto} />
-            })}
+			<>
+				<Header />
+				<div className="sell-wrapper">
+					<ListVent newList={list} />
+					{productos.map((producto) => {
+						return <Render selectProduct={producto} />;
+					})}
+				</div>
 
-            {/* {JSON.stringify(productos)} */}
-            {/* <h1>{productos.name}</h1> */}
-        </>
-    )
+				{/* {JSON.stringify(productos)} */}
+				{/* <h1>{productos.name}</h1> */}
+			</>
+		);
 }
 
 export default Sell

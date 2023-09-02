@@ -443,52 +443,54 @@ nav {
   margin-top: 100px;
   align-items: center;
   gap: 20px;
-  background-color: cornflowerblue;
+  background-color: var(--bg-secondary);
 }
 
 .listaVenta--titulos {
+  border-radius: 10px 10px 0 0;
   display: flex;
   flex-direction: row;
   gap: 36px;
   border: 50px;
   border-color: white;
   width: 109.5%;
-  background-color: darkred;
+  background-color: var(--fg-primary);
 }
 
-.listaVentas--productos {
+.listaVenta--container {
+  border-radius: 0 0 10px 10px;
+  display: flex;
+}
+.listitem-wrapper {
   display: flex;
   flex-direction: row;
-  gap: 49px;
+  /* gap: 49px; */
   width: 588px;
   align-items: center;
 }
 
-.nombre {
-  width: 149px;
+.listitem {
+  border: 0;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
 }
 
-.precio {
-  width: 136px;
+
+textarea {
+  border-radius: 10px;
+  background-color: var(--bg-primary);
+  font-size: 1.4rem;
+  height: 1.8rem;
+  width: 4rem;
 }
 
-.cantidad {
-  width: 79px;
+.listitem-table {
+  width: 90%;
 }
 
-.cantidad--input {
-  width: 79px;
-}
-
-.descuento {
-  width: 93px;
-}
-
-.cantidad--input {
-  width: 93px;
-}
-
-.total {
+.listitem-total {
   width: 44px;
 }
 
@@ -502,4 +504,25 @@ nav {
   flex-direction: column;
   align-content: flex-end;
   background-color: inherit;
+}
+
+.sell-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.sell-search-wrapper {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sell-search-input {
+  border-radius: 10px;
+  border: 1px solid var(--fg-primary);
+  font-size: 1rem;
+  padding: 0.4rem;
+  width: 16rem;
 }

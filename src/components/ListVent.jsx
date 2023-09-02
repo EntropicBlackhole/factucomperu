@@ -7,32 +7,32 @@ const ListVent = ({ newList }) => {
     const Productos = [
         {
             "id": "1",
-            "name": "pernos",
+            "name": "Pernos",
             "brand": "plop",
             "model": "103",
             "bought_price": "10",
             "sell_price": "20",
-            "amt": "0",
+            "amt": "15",
             "total": "0"
         },
         {
             "id": "2",
-            "name": "clavos",
+            "name": "Clavos",
             "brand": "pepitos",
             "model": "104",
             "bought_price": "15",
             "sell_price": "18",
-            "amt": "0",
+            "amt": "2",
             "total": "0"
         },
         {
             "id": "3",
-            "name": "alfiler",
+            "name": "Alfiler",
             "brand": "panam",
             "model": "105",
             "bought_price": "5",
             "sell_price": "10",
-            "amt": "0",
+            "amt": "4",
             "total": "0"
         }
 
@@ -42,7 +42,7 @@ const ListVent = ({ newList }) => {
         const name = event.target.value
         // console.log(name)
         const newProduct = Productos.filter(producto => {
-            if (producto.name == name) {
+            if (producto.name.toLowerCase() == name.toLowerCase()) {
                 return producto
             }
         })
@@ -60,9 +60,8 @@ const ListVent = ({ newList }) => {
 
     return (
         <>
-            <div>
-                <label htmlFor="">Buscar</label>
-                <input type="text" onChange={search} />
+            <div className='sell-search-wrapper'>
+                <input className="sell-search-input" type="text" onChange={search} placeholder='Busqueda' />
                 <select name="" id="" onChange={options}>
                     <option value="">--Guia de inventario--</option>
                     {Productos.map(producto => {

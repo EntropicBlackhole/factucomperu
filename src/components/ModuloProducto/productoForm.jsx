@@ -10,7 +10,6 @@ const AppointmentsForm = (onSaveAppointment, appointment) => {
         sell_price:'',
         amt:''            
     }
-
     const [form, setForm] = useState(INITIAL_FORM_STATE)
 
     useEffect(() => {        

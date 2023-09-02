@@ -16,13 +16,7 @@ const AppointmentsList = ({ appointments, onRemove, onEdit }) => {
                         <div key={appointment.id}>
                             <div>
                                 <div>
-                                    <strong>Codigo:</strong>{appointment.cod}
-                                </div>
-                                <div>
-                                    <strong>Clase:</strong>{appointment.class}
-                                </div>
-                                <div>
-                                    <strong>Descripción:</strong>{appointment.description}
+                                    <strong>Nombre:</strong>{appointment.name}
                                 </div>
                                 <div>
                                     <strong>Marca:</strong>{appointment.brand}
@@ -31,14 +25,19 @@ const AppointmentsList = ({ appointments, onRemove, onEdit }) => {
                                     <strong>Modelo:</strong>{appointment.model}
                                 </div>
                                 <div>
-                                    <strong>Stock:</strong>{appointment.stock}
+                                    <strong>Precio de Compra:</strong>{appointment.bought_price}
                                 </div>
                                 <div>
-                                    <strong>Precio venta:</strong>{appointment.sellprice}
+                                    <strong>Precio Venta:</strong>{appointment.sellprice}
                                 </div>
                                 <div>
-                                    <strong>Precio compra:</strong>{appointment.purchprice}
-                                </div>                                
+                                    <strong>Stock:</strong>{appointment.amt}
+                                </div>                                                             
+                            </div>
+
+                            <div>
+                                <button onClick={()=> onEdit(appointment)}>Editar</button>
+                                <button onClick={()=> onRemove(appointment)}>Eliminar</button>
                             </div>
                         </div>
                     )

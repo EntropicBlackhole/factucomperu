@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 const AppointmentsList = ({ appointments, onRemove, onEdit }) => {
     if (appointments.length === 0) {
         return (

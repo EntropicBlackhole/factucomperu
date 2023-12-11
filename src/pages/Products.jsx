@@ -27,6 +27,7 @@ const Products = () => {
 
     return (
         <>          
+            <Header />
             <AppointmentsForm
             onSaveAppointment={handleSaveAppointment}
             appointment={appointmentSelected}/>

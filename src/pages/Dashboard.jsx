@@ -1,8 +1,8 @@
 import LineChart from '../components/LineChart'
 import Chart from "chart.js/auto";
-import { Data } from "../utils/Data";
+// import { Data } from "../utils/Data";
 import { CategoryScale } from "chart.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "../components/Header"
 import ButtonIcon from '../components/ButtonIcon'
 
@@ -10,11 +10,57 @@ Chart.register(CategoryScale);
 
 
 const Dashboard = () => {
+
+  const [compName, setCompName] = useState("");
+  const [compLogo, setCompLogo] = useState("");
+  const [compSlogan, setCompSlogan] = useState("");
+  const [saleAmt, setSaleAmt] = useState(0);
+  const [productAmt, setProductAmt] = useState(0);
+  const [totalSale, setTotalSale] = useState(0);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/dashboard", {
+			method: "GET",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+				Authorization: `${window.sessionStorage.getItem("token")}`,
+				// 'Access-Control-Allow-Credentials': 'true',
+			}
+    }).then((response) => response.json())
+      .then((data) => {
+        setCompName(data.comp.name)
+        setCompLogo(data.comp.logo)
+        setCompSlogan(data.comp.slogan)
+        setProductAmt(data.misc.products_length)
+        setSaleAmt(data.misc.sales_length)
+        setTotalSale(data.misc.total_sell)
+        setChartData({
+					labels: data.chartData.map((data) => data.day),
+					datasets: [
+						{
+							data: data.chartData.map((data) => data.net_sell),
+							backgroundColor: [
+								"rgba(75,192,192,1)",
+								"#50AF95",
+								"#f3ba2f",
+								"#2a71d0",
+							],
+							borderColor: "#FCFCFC",
+							borderWidth: 2,
+						},
+					],
+				});
+        // console.log(data.chartData)
+        // console.log(data)
+      });
+  }, [])
+
   const [chartData, setChartData] = useState({
-    labels: Data.map((data) => data.day), 
+    labels: [].map((data) => data.day), 
     datasets: [
       {
-        data: Data.map((data) => data.net_sell),
+        data: [].map((data) => data.net_sell),
         backgroundColor: [
           "rgba(75,192,192,1)",
           "#50AF95",
@@ -29,14 +75,14 @@ const Dashboard = () => {
 
   return (
     <>
-      <Header />
+      <Header name={compName} logo={compLogo} slogan={compSlogan} />
       <div className="dashboard">
           <div className="left-half">
               <LineChart className="line-chart" chartData={chartData}/>
               <div className="monthly-data">
-                  <div className="data-card datacard-ventas"><img src="./src/assets/icons/cart.svg"></img>244 ventas</div>
-                  <div className="data-card datacard-productos"><img src="./src/assets/icons/cube.svg"></img>575 productos</div>
-                  <div className="data-card datacard-ganancia"><img src="./src/assets/icons/dollar.svg"></img>S/ 94679 de ganancia neta</div>
+            <div className="data-card datacard-ventas"><img src="./src/assets/icons/cart.svg"></img>{saleAmt} venta{saleAmt == 1 ? "" : "s"}</div>
+            <div className="data-card datacard-productos"><img src="./src/assets/icons/cube.svg"></img>{productAmt} producto{productAmt == 1 ? "" : "s"}</div>
+                  <div className="data-card datacard-ganancia"><img src="./src/assets/icons/dollar.svg"></img>S/ {totalSale} de venta</div>
               </div>
           </div>
           <div className="right-half">

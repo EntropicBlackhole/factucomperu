@@ -109,11 +109,11 @@ export const Data = [
 	},
 	{
 		day: 28,
-		net_sell: 1330,
+		net_sell: null,
 	},
 	{
 		day: 29,
-		net_sell: 1330,
+		net_sell: null,
 	},
 	{
 		day: 30,

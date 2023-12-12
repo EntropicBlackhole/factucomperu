@@ -141,7 +141,7 @@ app.get("/dashboard", async (req, res) => {
 		req.headers.authorization,
 		"ilovecats123",
 		async (err, authData) => {
-			if (err) return res.sendStatus(403);
+			if (err) return res.sendStatus(401);
 			const comp = await db.read({
 				table: "companies",
 				ID: authData.comp_id,
@@ -189,11 +189,41 @@ app.get("/dashboard", async (req, res) => {
 			let misc = {
 				products_length: products.length,
 				sales_length: sales.length,
-				total_sell: totalSale
+				total_sell: totalSale,
 			};
 			res
 				.status(200)
-				.json({ status: 200, success: true, comp: comp, misc: misc, chartData: chartData });
+				.json({
+					status: 200,
+					success: true,
+					comp: comp,
+					misc: misc,
+					chartData: chartData,
+				});
+		}
+	);
+});
+
+app.post("/sell", async (req, res) => {
+	jwt.verify(
+		req.headers.authorization,
+		"ilovecats123",
+		async (err, authData) => {
+			if (err) return res.sendStatus(401);
+			if (!authData.comp_id) return res.sendStatus(403);
+			const products = await db.readAll("products", {
+				where: {
+					comp_id: authData.comp_id,
+				},
+			})
+			const sales = await db.readAll("sales", {
+				where: {
+					comp_id: authData.comp_id,
+				},
+			})
+			// console.log("products", products);
+			// console.log("sales", sales);
+			res.status(200).json({ status: 200, success: true, products: products, sales: sales });
 		}
 	);
 });
@@ -201,8 +231,21 @@ app.get("/dashboard", async (req, res) => {
 /* Products */
 
 app.get("/products", async (req, res) => {
-	let products = await db.readAll("products");
-	res.status(200).json(products);
+	jwt.verify(
+		req.headers.authorization,
+		"ilovecats123",
+		async (err, authData) => {
+			if (err) return res.sendStatus(401);
+			if (!authData.comp_id) return res.sendStatus(403);
+			const products = await db.readAll("products", {
+				where: {
+					comp_id: authData.comp_id,
+				},
+			});
+			console.log(products);
+			res.status(200).json({ status: 200, success: true, products: products });
+		}
+	)
 });
 
 app.get("/products/:id", async (req, res) => {

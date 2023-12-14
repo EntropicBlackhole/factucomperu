@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 import ventaData from "../ventas.json";
 import Table from "../components/Table";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 const Sales = () => {
 	const [data, setData] = useState(convertData(ventaData, "ventas"));
 

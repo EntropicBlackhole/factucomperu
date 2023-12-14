@@ -58,7 +58,8 @@ const Login = () => {
 				// console.log(data);
 				if (data.success) {
 					navigate("/dashboard");
-					window.sessionStorage.setItem('token', data.token);
+					window.sessionStorage.setItem("token", data.token);
+					window.sessionStorage.setItem("comp_id", data.comp_id);
 				} else {
 					setErrorMessage(data.message);
 					setStatus(data.status);

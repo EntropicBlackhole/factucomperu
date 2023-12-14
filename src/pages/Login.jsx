@@ -60,6 +60,8 @@ const Login = () => {
 					navigate("/dashboard");
 					window.sessionStorage.setItem("token", data.token);
 					window.sessionStorage.setItem("comp_id", data.comp_id);
+					window.sessionStorage.setItem("username", data.username);
+					// console.log(data.username)
 				} else {
 					setErrorMessage(data.message);
 					setStatus(data.status);

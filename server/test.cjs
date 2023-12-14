@@ -1,10 +1,10 @@
 const functions = require('./functions.cjs')
 const db = new functions.Database();
 
-db.drop('users')
-db.drop('companies')
+// db.drop('users')
+// db.drop('companies')
 db.drop('sales')
-db.drop('products')
+// db.drop('products')
 return
 
 const jwt = require("jsonwebtoken");

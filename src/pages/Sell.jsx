@@ -1,14 +1,23 @@
+/* eslint-disable no-unused-vars */
 import Header from "../components/Header";
 import Table from "../components/Table";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Sell = () => {
-	const [client, setClient] = useState("");
+	const navigate = useNavigate();
+	const [compName, setCompName] = useState("");
+	const [compLogo, setCompLogo] = useState("");
+	const [compSlogan, setCompSlogan] = useState("");
+
+	const [client, setClient] = useState("00000000");
+	const [saleID, setSaleID] = useState("");
 	const [date, setDate] = useState("");
 	const [cashier, setCashier] = useState("");
 	const [products, setProducts] = useState([]);
-	const [shownProducts, setShownProducts] = useState([]);
+	const [shownProducts, setShownProducts] = useState({});
+	const [debugText, setDebugText] = useState("");
 	const [note, setNote] = useState("");
 
 	useEffect(() => {
@@ -27,7 +36,19 @@ const Sell = () => {
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.success) {
+					let date = new Date();
+
+					setCompName(data.comp.name);
+					setCompLogo(data.comp.logo);
+					setCompSlogan(data.comp.slogan);
+				
 					setProducts(reorganizeProductObject(data.products));
+
+					setSaleID(`V001-${data.sales.length + 1}`);
+					setDate(`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear().toString().substring(2, 4)}`)
+					setCashier(window.sessionStorage.getItem("username"));
+
+
 				} else {
 					console.log(data.message);
 				}
@@ -35,10 +56,13 @@ const Sell = () => {
 	}, []);
 
 	const handleOnSelect = (item) => {
+		if (shownProducts[item.id]) return;
 		item.amount = 1;
 		item.discount = 0;
 		item.total = item.price * item.amount - item.discount;
-		setShownProducts([...shownProducts, item]);
+		shownProducts[item.id] = item;
+		setShownProducts(shownProducts);
+		updateTable();
 	};
 
 	const formatResult = (item) => {
@@ -71,12 +95,13 @@ const Sell = () => {
 				stock: product.stock,
 			});
 		}
+
 		return returnArray;
 	}
 
 	return (
 		<div className="sell-wrapper">
-			<Header />
+			<Header name={compName} logo={compLogo} slogan={compSlogan} />
 			<div className="sell-wrapper-2">
 				<div className="sell-left">
 					<h2 className="sell-left-title">Informacion</h2>
@@ -84,52 +109,45 @@ const Sell = () => {
 						className="sell-left-info"
 						type="text"
 						placeholder="ID de venta"
-						value={"V001-1"}
+						value={saleID}
 						readOnly
 					/>
 					<input
 						className="sell-left-info"
 						type="text"
 						placeholder="Fecha"
-						value={"10/12/23"}
+						value={date}
 						readOnly
 					/>
 					<input
 						className="sell-left-info"
 						type="text"
 						placeholder="DNI"
-						value={"00000000"}
+						value={client}
 						readOnly
 					/>
 					<input
 						className="sell-left-info"
 						type="text"
 						placeholder="Cajer@"
-						value={"Christopher"}
+						value={cashier}
 						readOnly
 					/>
 					<input
+						onChange={(e) => setNote(e.target.value)}
 						className="sell-left-info"
 						type="text"
 						placeholder="Nota adicional"
 					/>
-					<button className="sell-button" onClick={updateProducts}>
+					<button className="sell-button" onClick={makeSale}>
 						Vender
 					</button>
 				</div>
 				<div className="sell-right">
 					<div className="sell-search-wrapper">
-						<form className="sell-search-id-form">
-							<input
-								className="sell-search-id-input"
-								type="text"
-								placeholder="ID del producto"></input>
-							<input
-								className="sell-search-submit"
-								type="submit"
-								value="Buscar"></input>
-						</form>
 						<ReactSearchAutocomplete
+							placeholder="Buscar..."
+
 							className="autocomplete-search"
 							items={products}
 							onSelect={handleOnSelect}
@@ -141,6 +159,7 @@ const Sell = () => {
 						data={shownProducts}
 						type="vender"
 						handleChange={handleOnChange}
+						handleDelete={handleOnDelete}
 						className="sell-table"
 					/>
 				</div>
@@ -148,76 +167,91 @@ const Sell = () => {
 		</div>
 	);
 
+	function makeSale() {
+		// let saleContent = [];
+		let outProducts = {};
+		for (let product in shownProducts) {
+			// shownProducts[product]
+			outProducts[product] = {
+				amt: parseInt(shownProducts[product].amount),
+				unit_price: parseFloat(shownProducts[product].price),
+				discount: parseFloat(shownProducts[product].discount),
+			};
+			// let a = { "1": { "amt": 2, "unit_price": 180, "discount": 10 } }
+			
+		}
+		var pad = function (num) {
+			return ("00" + num).slice(-2);
+		};
+		var date;
+		date = new Date();
+		date =
+			date.getUTCFullYear() +
+			"-" +
+			pad(date.getUTCMonth() + 1) +
+			"-" +
+			pad(date.getUTCDate()) +
+			" " +
+			pad(date.getUTCHours()) +
+			":" +
+			pad(date.getUTCMinutes()) +
+			":" +
+			pad(date.getUTCSeconds());
+		let saleContent = {
+			id: `${saleID}|${window.sessionStorage.getItem("comp_id")}`,
+			client: client,
+			date: date,
+			cashier: cashier,
+			products: JSON.stringify(outProducts),
+			note: note,
+			comp_id: window.sessionStorage.getItem("comp_id"),
+		};
+		console.log(saleContent)
+		// return
+			fetch("http://localhost:3000/sales", {
+				method: "POST",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+					Authorization: `${window.sessionStorage.getItem("token")}`,
+				},
+				body: JSON.stringify({
+					comp_id: window.sessionStorage.getItem("comp_id"),
+					saleID: saleID,
+					saleContent: saleContent,
+				}),
+			})
+				.then((response) => response.json())
+				.then((data) => {
+					if (data.success) {
+						//Place the sale pdf ready for printing
+						navigate("/comprobantes");
+					} else {
+						alert(data.message);
+					}
+				});
+	}
+
 	function handleOnChange(e) {
-		if (e.target.name.split("|")[0] == "amount") {
-			for (let i = 0; i < shownProducts.length; i++) {
-				if (shownProducts[i].id == e.target.name.split("|")[1]) {
-					shownProducts[i].amount = e.target.value;
-					shownProducts[i].total = Math.round(
-						shownProducts[i].price * shownProducts[i].amount -
-							shownProducts[i].discount,
-						2
-					);
-				}
-			}
-		} else if (e.target.name.split("|")[0] == "discount") {
-			for (let i = 0; i < shownProducts.length; i++) {
-				if (shownProducts[i].id == e.target.name.split("|")[1]) {
-					shownProducts[i].discount = e.target.value;
-					shownProducts[i].total =
-						shownProducts[i].price * shownProducts[i].amount -
-						shownProducts[i].discount;
-				}
-			}
-		}
+		let id = e.target.name.split("|")[1];
+		shownProducts[id][e.target.name.split("|")[0]] = e.target.value;
+		shownProducts[id].total = (
+			shownProducts[id].price * shownProducts[id].amount -
+			shownProducts[id].discount
+		).toFixed(2);
 		setShownProducts(shownProducts);
-		updateProducts();
+		updateTable();
 	}
 
-	function updateProducts() {
-		/*
-		Grab all the table fields
-		Sort them
-		Place them in products via setProducts
-		*/
-		const tableFields = document.querySelectorAll(".table-data");
-		const sortedFields = Array.from(tableFields);
-		console.log(tableFields);
-		for (let i = 0; i < sortedFields.length; i++) {
-			if (i == 3 || i == 4) {
-				sortedFields[i] = sortedFields[i].children[0].value;
-			} else {
-				sortedFields[i] = sortedFields[i].textContent;
-			}
-		}
-		let matrixFields = arrayToMatrix(sortedFields, 7);
-		let tempArray = [];
-		for (let vector in matrixFields) {
-			tempArray.push({
-				name: matrixFields[vector][0],
-				brand: matrixFields[vector][1],
-				price: matrixFields[vector][2],
-				amount: matrixFields[vector][3],
-				discount: matrixFields[vector][4],
-				total:
-					matrixFields[vector][2] * matrixFields[vector][3] -
-					matrixFields[vector][4],
-			});
-		}
-		setShownProducts(tempArray);
+	function handleOnDelete(e) {
+		let id = e.target.name.split("|")[1];
+		delete shownProducts[id];
+		setShownProducts(shownProducts);
+		updateTable();
 	}
 
-	function arrayToMatrix(array, k) {
-		// Calculate the number of arrays (n) in the matrix
-		const n = Math.floor(array.length / k);
-		// Create an empty matrix to store the results
-		const matrix = [];
-		// Loop through the array and create sub-arrays of k elements
-		for (let i = 0; i < n; i++) {
-			matrix.push(array.slice(i * k, (i + 1) * k));
-		}
-		// Return the resulting matrix
-		return matrix;
+	function updateTable() {
+		setDebugText(JSON.stringify(shownProducts, null, 2));
 	}
 };
 

@@ -69,6 +69,7 @@ app.post("/login", async (req, res) => {
 	if (hashedPassword == user.password) {
 		req.session.user = {
 			id: email,
+			username: user.username,
 			comp_id: user.comp_id,
 			token: jwt.sign({ email, comp_id: user.comp_id }, "ilovecats123", {
 				expiresIn: "2d",
@@ -76,7 +77,7 @@ app.post("/login", async (req, res) => {
 		};
 		res
 			.status(200)
-			.json({ status: 200, success: true, token: req.session.user.token });
+			.json({ status: 200, success: true, token: req.session.user.token, username: user.username, comp_id: user.comp_id });
 	} else {
 		return res
 			.status(401)
@@ -159,21 +160,22 @@ app.get("/dashboard", async (req, res) => {
 			let chartData = [];
 			let tempData = [];
 			sales.forEach((sale) => {
-				// console.log(tempData[parseInt(sale.date.split("T")[0].split("-")[1]) - 1])
+				// console.log(tempData[parseInt(sale.date.split("-")[1]) - 1])
 				if (
-					tempData[parseInt(sale.date.split("T")[0].split("-")[1]) - 1] ==
+					tempData[parseInt(sale.date.split("-")[2]) - 1] ==
 					undefined
 				) {
-					tempData[parseInt(sale.date.split("T")[0].split("-")[1]) - 1] = 0;
+					tempData[parseInt(sale.date.split("-")[2]) - 1] = 0;
 				}
 				let saleProducts = JSON.parse(sale.products);
+				// console.log(saleProducts)
 				let netSell = 0;
 				for (let product in saleProducts) {
 					netSell +=
 						saleProducts[product].unit_price * saleProducts[product].amt -
 						saleProducts[product].discount;
 				}
-				tempData[parseInt(sale.date.split("T")[0].split("-")[1]) - 1] +=
+				tempData[parseInt(sale.date.split("-")[2]) - 1] +=
 					netSell;
 			});
 			let totalSale = 0;
@@ -221,9 +223,13 @@ app.post("/sell", async (req, res) => {
 					comp_id: authData.comp_id,
 				},
 			})
+			const comp = await db.read({
+				table: "companies",
+				ID: authData.comp_id,
+			});
 			// console.log("products", products);
 			// console.log("sales", sales);
-			res.status(200).json({ status: 200, success: true, products: products, sales: sales });
+			res.status(200).json({ status: 200, success: true, products: products, sales: sales, comp: comp });
 		}
 	);
 });
@@ -334,20 +340,45 @@ app.get("/sales/:id", async (req, res) => {
 	res.status(200).json(sale);
 });
 
-app.post("/sales/:id", async (req, res) => {
-	const id = req.params.id;
-	let saleRead = await db.read({
-		table: "sales",
-		ID: id,
-	});
-	if (saleRead != null)
-		return res.status(403).json({ error: "Sale already exists" });
-	let sale = await db.write({
-		table: "sales",
-		ID: id,
-		dataToUpdate: req.query,
-	});
-	res.status(201).json(sale);
+app.post("/sales", async (req, res) => {
+	jwt.verify(
+		req.headers.authorization,
+		"ilovecats123",
+		async (err, authData) => {
+			if (err) return res.status(401).json({ status: 401, success: false, message: err.message });
+			if (!authData.comp_id) return res.status(403).json({ status: 403, success: false, message: "Company ID not found" });
+			let saleID = req.body.saleID.split("-")[1];; //V001-1|pktuv81idjh
+			// console.log(req.body)
+			// const saleID = id.split("|")[0].split("-")[1]; //1
+			const compID = req.body.comp_id //pktuv81idjh
+			// console.log(compID);
+			let saleRead = await db.read({
+				table: "sales",
+				ID: `${saleID}|${compID}`,
+			});
+			// console.log(compID);
+			while (true) {
+				if (saleRead == null) break;
+				saleID = saleID + 1;
+			// console.log(compID);
+				saleRead = await db.read({
+					table: "sales",
+					ID: `${saleID}|${compID}`,
+				});
+			}
+			// let id = saleID + "|" + compID; //2|pktuv81idjh
+			// if (saleRead != null)
+			// return res.status(403).json({ error: "Sale already exists" });
+			delete req.body.saleContent.id;
+			// console.log(compID);
+			let sale = await db.write({
+				table: "sales",
+				ID: `${saleID}|${compID}`,
+				dataToUpdate: req.body.saleContent,
+			});
+			res.status(201).json({ status: 201, success: true });
+		}
+	);
 });
 
 app.patch("/sales/:id", async (req, res) => {

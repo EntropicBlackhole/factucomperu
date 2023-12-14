@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [compName, setCompName] = useState("");
   const [compLogo, setCompLogo] = useState("");
   const [compSlogan, setCompSlogan] = useState("");
+  
   const [saleAmt, setSaleAmt] = useState(0);
   const [productAmt, setProductAmt] = useState(0);
   const [totalSale, setTotalSale] = useState(0);

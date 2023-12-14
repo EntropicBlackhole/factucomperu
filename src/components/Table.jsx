@@ -2,7 +2,7 @@ import ButtonIcon from "../components/ButtonIcon";
 // import { useState } from 'react';
 
 function Table(data) {
-	let tableData = data.data;
+	let tableData = data.data;	
 	// console.log(tableData)
 	data.type == "ventas";
 	if (data.type == "ventas") {
@@ -10,6 +10,7 @@ function Table(data) {
 			<table className="table">
 				<thead className="table-head">
 					<tr
+						key="tablehead"
 						className="table-row"
 						style={{ "gridTemplateColumns": "1fr 1fr 1fr 1fr 1fr" }}>
 						<th className="table-header">Serie</th>
@@ -57,20 +58,38 @@ function Table(data) {
 					</tr>
 				</thead>
 				<tbody className="table-body">
-					{tableData.map((item) => {
+					{Object.keys(tableData).map((item) => {
+						// console.log(tableData[item])
 						return (
 							<tr
-								key={item.name}
+								key={tableData[item].id}
 								className="table-row"
-								style={{ "gridTemplateColumns": "1fr 1fr 1fr 1fr 1fr 1fr 1fr" }}>
-								<td className="table-data">{item.name}</td>
-								<td className="table-data">{item.brand}</td>
-								<td className="table-data">{item.price}</td>
-								<td className="table-data"><input className="input-sell" type="number" name={"amount|" + item.id} onChange={data.handleChange} min="1" max={item.stock} defaultValue={item.amount}></input></td>
-								<td className="table-data"><input className="input-sell" type="number" name={"discount|" + item.id} onChange={data.handleChange} min="0" defaultValue={item.discount}></input></td>
-								<td className="table-data">{item.total}</td>
+								style={{ gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr" }}>
+								<td className="table-data">{tableData[item].name}</td>
+								<td className="table-data">{tableData[item].brand}</td>
+								<td className="table-data">{tableData[item].price}</td>
 								<td className="table-data">
-									<ButtonIcon icon="./src/assets/icons/trash.svg" />
+									<input
+										className="input-sell"
+										type="number"
+										name={`amount|${tableData[item].id}`}
+										onChange={data.handleChange}
+										min="1"
+										max={tableData[item].stock}
+										defaultValue={tableData[item].amount}></input>
+								</td>
+								<td className="table-data">
+									<input
+										className="input-sell"
+										type="number"
+										name={`discount|${tableData[item].id}`}
+										onChange={data.handleChange}
+										min="0"
+										defaultValue={tableData[item].discount}></input>
+								</td>
+								<td className="table-data">{tableData[item].total}</td>
+								<td className="table-data">
+									<ButtonIcon name={`delete|${tableData[item].id}`} onClick={data.handleDelete} icon="./src/assets/icons/trash.svg" />
 								</td>
 							</tr>
 						);

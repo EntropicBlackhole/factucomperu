@@ -198,6 +198,20 @@ function httpGetAsync(theUrl, method) {
 	xmlHttp.send(null);
 }
 
+function arrayToMatrix(array, k) {
+	// Calculate the number of arrays (n) in the matrix
+	const n = Math.floor(array.length / k);
+	// Create an empty matrix to store the results
+	const matrix = [];
+	// Loop through the array and create sub-arrays of k elements
+	for (let i = 0; i < n; i++) {
+		matrix.push(array.slice(i * k, (i + 1) * k));
+	}
+	// Return the resulting matrix
+	return matrix;
+}
+
 // eslint-disable-next-line no-undef
 exports.Database = Database;
 exports.httpGetAsync = httpGetAsync;
+exports.arrayToMatrix = arrayToMatrix;

@@ -12,25 +12,28 @@ function Table(data) {
 					<tr
 						key="tablehead"
 						className="table-row"
-						style={{ "gridTemplateColumns": "1fr 1fr 1fr 1fr 1fr" }}>
+						style={{ "gridTemplateColumns": "1fr 1fr 1fr 1fr 1fr 1fr" }}>
 						<th className="table-header">Serie</th>
 						<th className="table-header">Cliente</th>
-						<th className="table-header">Date</th>
+						<th className="table-header">Fecha</th>
 						<th className="table-header">Monto</th>
+						<th className="table-header">Nota</th>
 						<th className="table-header">Opciones</th>
 					</tr>
 				</thead>
 				<tbody className="table-body">
 					{tableData.map((item) => {
+						// console.log(item)
 						return (
 							<tr
 								key={item.serie}
 								className="table-row"
-								style={{ "gridTemplateColumns": "1fr 1fr 1fr 1fr 1fr" }}>
+								style={{ "gridTemplateColumns": "1fr 1fr 1fr 1fr 1fr 1fr" }}>
 								<td className="table-data">{item.serie}</td>
 								<td className="table-data">{item.client}</td>
 								<td className="table-data">{item.date}</td>
 								<td className="table-data">{item.totalSale}</td>
+								<td className="table-data">{item.note}</td>
 								<td className="table-data">
 									<ButtonIcon icon="./src/assets/icons/print.svg" />
 									{/* This will open a new window with the pdf thing */}

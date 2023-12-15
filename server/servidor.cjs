@@ -330,14 +330,35 @@ app.get("/sales", async (req, res) => {
 	res.status(200).json(sales);
 });
 
-app.get("/sales/:id", async (req, res) => {
-	const id = req.params.id;
-	let sale = await db.read({
-		table: "sales",
-		ID: id,
-	});
-	if (sale == null) return res.status(404).json({ error: "Sale not found" });
-	res.status(200).json(sale);
+app.get("/sales/:comp_id", async (req, res) => {
+	jwt.verify(
+		req.headers.authorization,
+		"ilovecats123",
+		async (err, authData) => {
+			let sales = await db.readAll("sales", {
+				where: {
+					comp_id: req.params.comp_id,
+				},
+			});
+			const comp = await db.read({
+				table: "companies",
+				ID: authData.comp_id,
+			});
+			if (sales == null) return res.status(404).json({ error: "Sale not found" });
+
+			for (let i = 0; i < sales.length; i++) {
+				sales[i].products = JSON.parse(sales[i].products);
+				let d = new Date(sales[i].date);
+				sales[i].date = d.getTime();
+			}
+			let returnObj = {};
+			for (let i = 0; i < sales.length; i++) {
+				returnObj[`V001-${sales[i].id.split("|")[0]}`] = sales[i];
+			}
+			
+			return res.status(200).json({ status: 200, success: true, sales: returnObj, comp: comp });
+		}
+	)
 });
 
 app.post("/sales", async (req, res) => {

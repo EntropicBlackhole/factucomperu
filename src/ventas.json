@@ -16,7 +16,7 @@
 		"client": "00000000",
 		"date": 1693031457199,
 		"cashier": "CHRISTOPHER",
-		"products": {
+		"produ1693031457199cts": {
 			"3": {
 				"amt": 2,
 				"unit_price": 180,
@@ -32,7 +32,7 @@
 	},
     "3": {
 		"client": "00000000",
-		"date": 1693031457199,
+		"date": ,
 		"cashier": "CHRISTOPHER",
 		"products": {
 			"4": {

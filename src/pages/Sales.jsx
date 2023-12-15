@@ -1,9 +1,38 @@
 import Header from "../components/Header";
-import ventaData from "../ventas.json";
+// import ventaData from "../ventas.json";
 import Table from "../components/Table";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const Sales = () => {
-	const [data, setData] = useState(convertData(ventaData, "ventas"));
+	const [data, setData] = useState([])
+	const [globalData, setGlobalData] = useState([])
+
+	const [compName, setCompName] = useState("");
+	const [compLogo, setCompLogo] = useState("");
+	const [compSlogan, setCompSlogan] = useState("");
+	
+	useEffect(() => {
+		fetch(`http://localhost:3000/sales/${window.sessionStorage.getItem("comp_id")}`, {
+			method: "GET",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+				Authorization: `${window.sessionStorage.getItem("token")}`,
+				// 'Access-Control-Allow-Credentials': 'true',
+			},
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.success) {
+					setData(convertData(data.sales, "ventas"));
+					setGlobalData(convertData(data.sales, "ventas"));
+
+					setCompName(data.comp.name);
+					setCompLogo(data.comp.logo);
+					setCompSlogan(data.comp.slogan);
+				}
+				// else console.log(data.message);
+			});
+	}, []);
 
 	function searchVentas(event) {
 		event.preventDefault();
@@ -19,7 +48,7 @@ const Sales = () => {
 		let note = event.target[3].value;
 		let serie = event.target[4].value;
 		// console.log(ventaData)
-		let ventas = convertData(ventaData, "itemList");
+		let ventas = convertData(globalData, "itemList");
 		// console.log(ventas)
 		// console.log(ventas)
 		// let newData = filterData(ventas, { date, client, cashier, note, serie });
@@ -35,9 +64,9 @@ const Sales = () => {
 
 				let date = new Date(data[info].date);
 
-				newObject.date = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
+				newObject.date = `${date.getMonth() < 10 ? "0" : ""}${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
 				newObject.client = data[info].client;
-
+				newObject.note = data[info].note;
 				let totalSale = 0;
 				for (let product in data[info].products) {
 					totalSale +=
@@ -52,7 +81,9 @@ const Sales = () => {
 
 				let date = new Date(data[info].date);
 
-				newObject.date = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
+				newObject.date = `${
+					date.getMonth() < 10 ? "0" : ""
+				}${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
 				newObject.client = data[info].client;
 				newObject.cashier = data[info].cashier;
 				newObject.note = data[info].note;
@@ -88,7 +119,7 @@ const Sales = () => {
 	}
 	return (
 		<>
-			<Header />
+			<Header name={compName} logo={compLogo} slogan={compSlogan} />
 			<div>
 				<form className="search-form" onSubmit={searchVentas}>
 					<input

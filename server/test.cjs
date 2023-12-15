@@ -1,9 +1,13 @@
 const functions = require('./functions.cjs')
 const db = new functions.Database();
 
+
+let d = new Date("2023-12-14 11:56:50.000 +00:00");
+
+console.log(d.getTime())
 // db.drop('users')
 // db.drop('companies')
-db.drop('sales')
+// db.drop('sales')
 // db.drop('products')
 return
 

@@ -102,7 +102,21 @@ const Sales = () => {
 	}
 
 	function filterData(data, inputs) {
+		// console.log(data)
+		// console.log(inputs)
+		const { date, client, cashier, note, serie } = inputs;
 		let returnArray = [];
+		for (let piece of data) {
+			console.log(returnArray);
+			if (Object.values(piece).includes(date)) returnArray.push(piece);
+			else if (Object.values(piece).includes(client)) returnArray.push(piece);
+			else if (Object.values(piece).includes(cashier)) returnArray.push(piece);
+			else if (Object.values(piece).includes(note)) returnArray.push(piece);
+			else if (Object.values(piece).includes(serie)) returnArray.push(piece);
+		}
+		return returnArray;
+
+		
 		for (let piece of data) {
 			let unjoinedStatements = [];
 			// console.log("piece = ", piece);

@@ -75,9 +75,13 @@ app.post("/login", async (req, res) => {
 				expiresIn: "2d",
 			}),
 		};
-		res
-			.status(200)
-			.json({ status: 200, success: true, token: req.session.user.token, username: user.username, comp_id: user.comp_id });
+		res.status(200).json({
+			status: 200,
+			success: true,
+			token: req.session.user.token,
+			username: user.username,
+			comp_id: user.comp_id,
+		});
 	} else {
 		return res
 			.status(401)
@@ -142,7 +146,17 @@ app.get("/dashboard", async (req, res) => {
 		req.headers.authorization,
 		"ilovecats123",
 		async (err, authData) => {
-			if (err) return res.sendStatus(401);
+			if (err && err.name == "TokenExpiredError")
+				return res
+					.status(401)
+					.json({ error: "TokenExpiredError", success: false });
+			if (!authData.comp_id)
+				return res.status(403).json({
+					status: 403,
+					success: false,
+					message: "Company ID not found",
+					error: "CompanyIDNotFound",
+				});
 			const comp = await db.read({
 				table: "companies",
 				ID: authData.comp_id,
@@ -161,10 +175,7 @@ app.get("/dashboard", async (req, res) => {
 			let tempData = [];
 			sales.forEach((sale) => {
 				// console.log(tempData[parseInt(sale.date.split("-")[1]) - 1])
-				if (
-					tempData[parseInt(sale.date.split("-")[2]) - 1] ==
-					undefined
-				) {
+				if (tempData[parseInt(sale.date.split("-")[2]) - 1] == undefined) {
 					tempData[parseInt(sale.date.split("-")[2]) - 1] = 0;
 				}
 				let saleProducts = JSON.parse(sale.products);
@@ -175,8 +186,7 @@ app.get("/dashboard", async (req, res) => {
 						saleProducts[product].unit_price * saleProducts[product].amt -
 						saleProducts[product].discount;
 				}
-				tempData[parseInt(sale.date.split("-")[2]) - 1] +=
-					netSell;
+				tempData[parseInt(sale.date.split("-")[2]) - 1] += netSell;
 			});
 			let totalSale = 0;
 			for (let i = 0; i < tempData.length; i++) {
@@ -193,15 +203,13 @@ app.get("/dashboard", async (req, res) => {
 				sales_length: sales.length,
 				total_sell: totalSale,
 			};
-			res
-				.status(200)
-				.json({
-					status: 200,
-					success: true,
-					comp: comp,
-					misc: misc,
-					chartData: chartData,
-				});
+			res.status(200).json({
+				status: 200,
+				success: true,
+				comp: comp,
+				misc: misc,
+				chartData: chartData,
+			});
 		}
 	);
 });
@@ -211,25 +219,40 @@ app.post("/sell", async (req, res) => {
 		req.headers.authorization,
 		"ilovecats123",
 		async (err, authData) => {
-			if (err) return res.sendStatus(401);
-			if (!authData.comp_id) return res.sendStatus(403);
+			if (err && err.name == "TokenExpiredError")
+				return res
+					.status(401)
+					.json({ error: "TokenExpiredError", success: false });
+			if (!authData.comp_id)
+				return res.status(403).json({
+					status: 403,
+					success: false,
+					message: "Company ID not found",
+					error: "CompanyIDNotFound",
+				});
 			const products = await db.readAll("products", {
 				where: {
 					comp_id: authData.comp_id,
 				},
-			})
+			});
 			const sales = await db.readAll("sales", {
 				where: {
 					comp_id: authData.comp_id,
 				},
-			})
+			});
 			const comp = await db.read({
 				table: "companies",
 				ID: authData.comp_id,
 			});
 			// console.log("products", products);
 			// console.log("sales", sales);
-			res.status(200).json({ status: 200, success: true, products: products, sales: sales, comp: comp });
+			res.status(200).json({
+				status: 200,
+				success: true,
+				products: products,
+				sales: sales,
+				comp: comp,
+			});
 		}
 	);
 });
@@ -241,17 +264,31 @@ app.get("/products", async (req, res) => {
 		req.headers.authorization,
 		"ilovecats123",
 		async (err, authData) => {
-			if (err) return res.sendStatus(401);
-			if (!authData.comp_id) return res.sendStatus(403);
+			if (err && err.name == "TokenExpiredError")
+				return res
+					.status(401)
+					.json({ error: "TokenExpiredError", success: false });
+			if (!authData.comp_id)
+				return res.status(403).json({
+					status: 403,
+					success: false,
+					message: "Company ID not found",
+					error: "CompanyIDNotFound",
+				});
 			const products = await db.readAll("products", {
 				where: {
 					comp_id: authData.comp_id,
 				},
 			});
-			console.log(products);
-			res.status(200).json({ status: 200, success: true, products: products });
+			const comp = await db.read({
+				table: "companies",
+				ID: authData.comp_id,
+			});
+			res
+				.status(200)
+				.json({ status: 200, success: true, products: products, comp: comp });
 		}
-	)
+	);
 });
 
 app.get("/products/:id", async (req, res) => {
@@ -266,19 +303,37 @@ app.get("/products/:id", async (req, res) => {
 });
 
 app.post("/products/:id", async (req, res) => {
-	const id = req.params.id;
-	let productRead = await db.read({
-		table: "products",
-		ID: id,
-	});
-	if (productRead != null)
-		return res.status(403).json({ error: "Product already exists" });
-	let product = await db.write({
-		table: "products",
-		ID: id,
-		dataToUpdate: req.query,
-	});
-	res.status(201).json(product);
+	jwt.verify(
+		req.headers.authorization,
+		"ilovecats123",
+		async (err, authData) => {
+			if (err && err.name == "TokenExpiredError")
+				return res
+					.status(401)
+					.json({ error: "TokenExpiredError", success: false });
+			if (!authData.comp_id)
+				return res.status(403).json({
+					status: 403,
+					success: false,
+					message: "Company ID not found",
+					error: "CompanyIDNotFound",
+				});
+			const id = req.params.id;
+			let productRead = await db.read({
+				table: "products",
+				ID: id,
+			});
+			if (productRead != null)
+				return res.status(403).json({ error: "Product already exists" });
+
+			let product = await db.write({
+				table: "products",
+				ID: id,
+				dataToUpdate: req.body.createProductContent,
+			});
+			res.status(201).json({ status: 201, success: true });
+		}
+	);
 });
 
 app.patch("/products/:id", async (req, res) => {
@@ -335,6 +390,17 @@ app.get("/sales/:comp_id", async (req, res) => {
 		req.headers.authorization,
 		"ilovecats123",
 		async (err, authData) => {
+			if (err && err.name == "TokenExpiredError")
+				return res
+					.status(401)
+					.json({ error: "TokenExpiredError", success: false });
+			if (!authData.comp_id)
+				return res.status(403).json({
+					status: 403,
+					success: false,
+					message: "Company ID not found",
+					error: "CompanyIDNotFound",
+				});
 			let sales = await db.readAll("sales", {
 				where: {
 					comp_id: req.params.comp_id,
@@ -344,7 +410,8 @@ app.get("/sales/:comp_id", async (req, res) => {
 				table: "companies",
 				ID: authData.comp_id,
 			});
-			if (sales == null) return res.status(404).json({ error: "Sale not found" });
+			if (sales == null)
+				return res.status(404).json({ error: "Sale not found" });
 
 			for (let i = 0; i < sales.length; i++) {
 				sales[i].products = JSON.parse(sales[i].products);
@@ -355,10 +422,12 @@ app.get("/sales/:comp_id", async (req, res) => {
 			for (let i = 0; i < sales.length; i++) {
 				returnObj[`V001-${sales[i].id.split("|")[0]}`] = sales[i];
 			}
-			
-			return res.status(200).json({ status: 200, success: true, sales: returnObj, comp: comp });
+
+			return res
+				.status(200)
+				.json({ status: 200, success: true, sales: returnObj, comp: comp });
 		}
-	)
+	);
 });
 
 app.post("/sales", async (req, res) => {
@@ -366,12 +435,21 @@ app.post("/sales", async (req, res) => {
 		req.headers.authorization,
 		"ilovecats123",
 		async (err, authData) => {
-			if (err) return res.status(401).json({ status: 401, success: false, message: err.message });
-			if (!authData.comp_id) return res.status(403).json({ status: 403, success: false, message: "Company ID not found" });
-			let saleID = req.body.saleID.split("-")[1];; //V001-1|pktuv81idjh
+			if (err && err.name == "TokenExpiredError")
+				return res
+					.status(401)
+					.json({ error: "TokenExpiredError", success: false });
+			if (!authData.comp_id)
+				return res.status(403).json({
+					status: 403,
+					success: false,
+					message: "Company ID not found",
+					error: "CompanyIDNotFound",
+				});
+			let saleID = req.body.saleID.split("-")[1]; //V001-1|pktuv81idjh
 			// console.log(req.body)
 			// const saleID = id.split("|")[0].split("-")[1]; //1
-			const compID = req.body.comp_id //pktuv81idjh
+			const compID = req.body.comp_id; //pktuv81idjh
 			// console.log(compID);
 			let saleRead = await db.read({
 				table: "sales",
@@ -381,7 +459,7 @@ app.post("/sales", async (req, res) => {
 			while (true) {
 				if (saleRead == null) break;
 				saleID = saleID + 1;
-			// console.log(compID);
+				// console.log(compID);
 				saleRead = await db.read({
 					table: "sales",
 					ID: `${saleID}|${compID}`,

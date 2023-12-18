@@ -40,7 +40,7 @@ class Database {
 			},
 			comp_id: {
 				type: DataTypes.TEXT,
-			}
+			},
 		});
 		this.createTable("sales", {
 			id: {
@@ -51,7 +51,7 @@ class Database {
 				type: DataTypes.TEXT,
 			},
 			date: {
-				type: DataTypes.DATE,
+				type: DataTypes.TEXT,
 			},
 			cashier: {
 				type: DataTypes.TEXT,
@@ -64,7 +64,7 @@ class Database {
 			},
 			comp_id: {
 				type: DataTypes.TEXT,
-			}
+			},
 		});
 		this.createTable("users", {
 			id: {
@@ -84,8 +84,8 @@ class Database {
 				type: DataTypes.TEXT,
 			},
 			salt: {
-				type: DataTypes.TEXT
-			}
+				type: DataTypes.TEXT,
+			},
 		});
 		this.createTable("companies", {
 			id: {
@@ -99,29 +99,29 @@ class Database {
 				type: DataTypes.TEXT,
 			},
 			logo: {
-				type: DataTypes.TEXT
+				type: DataTypes.TEXT,
 			},
 			slogan: {
-				type: DataTypes.TEXT
+				type: DataTypes.TEXT,
 			},
 			anniversary: {
-				type: DataTypes.TEXT
+				type: DataTypes.TEXT,
 			},
 			ruc: {
-				type: DataTypes.TEXT
+				type: DataTypes.TEXT,
 			},
 			address: {
-				type: DataTypes.TEXT
+				type: DataTypes.TEXT,
 			},
 			contact_phone: {
-				type: DataTypes.TEXT
+				type: DataTypes.TEXT,
 			},
 			contact_email: {
-				type: DataTypes.TEXT
+				type: DataTypes.TEXT,
 			},
 			attention_hours: {
-				type: DataTypes.TEXT
-			}
+				type: DataTypes.TEXT,
+			},
 		});
 		this.sequelize.sync();
 	}
@@ -210,6 +210,8 @@ function arrayToMatrix(array, k) {
 	// Return the resulting matrix
 	return matrix;
 }
+
+
 
 // eslint-disable-next-line no-undef
 exports.Database = Database;

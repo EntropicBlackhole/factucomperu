@@ -35,6 +35,13 @@ const Sell = () => {
 		})
 			.then((response) => response.json())
 			.then((data) => {
+				if (
+					!data.success &&
+					(data.error == "TokenExpiredError" ||
+						data.error == "CompanyIDNotFound")
+				) {
+					navigate("/login");
+				}
 				if (data.success) {
 					let date = new Date();
 
@@ -186,17 +193,18 @@ const Sell = () => {
 		var date;
 		date = new Date();
 		date =
-			date.getUTCFullYear() +
+			date.getFullYear() +
 			"-" +
-			pad(date.getUTCMonth() + 1) +
+			pad(date.getMonth() + 1) +
 			"-" +
-			pad(date.getUTCDate()) +
+			pad(date.getDate()) +
 			" " +
-			pad(date.getUTCHours()) +
+			pad(date.getHours()) +
 			":" +
-			pad(date.getUTCMinutes()) +
+			pad(date.getMinutes()) +
 			":" +
-			pad(date.getUTCSeconds());
+			pad(date.getSeconds());
+		console.log(date)
 		let saleContent = {
 			id: `${saleID}|${window.sessionStorage.getItem("comp_id")}`,
 			client: client,
@@ -206,7 +214,7 @@ const Sell = () => {
 			note: note,
 			comp_id: window.sessionStorage.getItem("comp_id"),
 		};
-		console.log(saleContent)
+		// console.log(saleContent)
 		// return
 			fetch("http://localhost:3000/sales", {
 				method: "POST",

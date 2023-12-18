@@ -2,30 +2,43 @@ import Header from "../components/Header";
 // import ventaData from "../ventas.json";
 import Table from "../components/Table";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 const Sales = () => {
-	const [data, setData] = useState([])
-	const [globalData, setGlobalData] = useState([])
+	const navigate = useNavigate();
+
+	const [data, setData] = useState([]);
+	const [globalData, setGlobalData] = useState([]);
 
 	const [compName, setCompName] = useState("");
 	const [compLogo, setCompLogo] = useState("");
 	const [compSlogan, setCompSlogan] = useState("");
-	
+
 	useEffect(() => {
-		fetch(`http://localhost:3000/sales/${window.sessionStorage.getItem("comp_id")}`, {
-			method: "GET",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-				Authorization: `${window.sessionStorage.getItem("token")}`,
-				// 'Access-Control-Allow-Credentials': 'true',
-			},
-		})
+		fetch(
+			`http://localhost:3000/sales/${window.sessionStorage.getItem("comp_id")}`,
+			{
+				method: "GET",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+					Authorization: `${window.sessionStorage.getItem("token")}`,
+					// 'Access-Control-Allow-Credentials': 'true',
+				},
+			}
+		)
 			.then((response) => response.json())
 			.then((data) => {
+				if (
+					!data.success &&
+					(data.error == "TokenExpiredError" ||
+						data.error == "CompanyIDNotFound")
+				) {
+					navigate("/login");
+				}
 				if (data.success) {
 					setData(convertData(data.sales, "ventas"));
 					setGlobalData(convertData(data.sales, "ventas"));
-
 					setCompName(data.comp.name);
 					setCompLogo(data.comp.logo);
 					setCompSlogan(data.comp.slogan);
@@ -40,20 +53,43 @@ const Sales = () => {
 			event.target[0].value == ""
 				? event.target[0].value
 				: `${event.target[0].value.split("-")[1]}/${
-				event.target[0].value.split("-")[2]
+						event.target[0].value.split("-")[2]
 				}/${event.target[0].value.split("-")[0]}`;
-		// console.log(`"${date}"`);
+
 		let client = event.target[1].value;
-		let cashier = event.target[2].value;
+		let totalSale = event.target[2].value;
 		let note = event.target[3].value;
 		let serie = event.target[4].value;
-		// console.log(ventaData)
-		let ventas = convertData(globalData, "itemList");
-		// console.log(ventas)
-		// console.log(ventas)
-		// let newData = filterData(ventas, { date, client, cashier, note, serie });
-		// console.log(newData)
-		setData(filterData(ventas, { date, client, cashier, note, serie }));
+
+		let inputs = {};
+		let passedNothing = true;
+		if (date != "") {
+			inputs.date = date;
+			passedNothing = false;
+		}
+		if (client != "") {
+			inputs.client = client;
+			passedNothing = false;
+		}
+		if (totalSale != "") {
+			inputs.totalSale = totalSale;
+			passedNothing = false;
+		}
+		if (note != "") {
+			inputs.note = note;
+			passedNothing = false;
+		}
+		if (serie != "") {
+			inputs.serie = serie;
+			passedNothing = false;
+		}
+		if (passedNothing) setData(globalData);
+		let convertedGlobalData = [];
+		for (let data of globalData) {
+			data.totalSale = data.totalSale.toString();
+			convertedGlobalData.push(data);
+		}
+		setData(matchFilter(convertedGlobalData, inputs));
 	}
 
 	function convertData(data, type) {
@@ -64,7 +100,9 @@ const Sales = () => {
 
 				let date = new Date(data[info].date);
 
-				newObject.date = `${date.getMonth() < 10 ? "0" : ""}${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
+				newObject.date = `${date.getMonth() < 10 ? "0" : ""}${
+					date.getMonth() + 1
+				}/${date.getDate()}/${date.getFullYear()}`;
 				newObject.client = data[info].client;
 				newObject.note = data[info].note;
 				let totalSale = 0;
@@ -101,36 +139,15 @@ const Sales = () => {
 		return arrayedData;
 	}
 
-	function filterData(data, inputs) {
-		// console.log(data)
-		// console.log(inputs)
-		const { date, client, cashier, note, serie } = inputs;
-		let returnArray = [];
-		for (let piece of data) {
-			console.log(returnArray);
-			if (Object.values(piece).includes(date)) returnArray.push(piece);
-			else if (Object.values(piece).includes(client)) returnArray.push(piece);
-			else if (Object.values(piece).includes(cashier)) returnArray.push(piece);
-			else if (Object.values(piece).includes(note)) returnArray.push(piece);
-			else if (Object.values(piece).includes(serie)) returnArray.push(piece);
-		}
-		return returnArray;
-
-		
-		for (let piece of data) {
-			let unjoinedStatements = [];
-			// console.log("piece = ", piece);
-			for (let key in piece) {
-				if (inputs[key] == undefined) inputs[key] = "";
-				unjoinedStatements.push(`piece.${key}.includes(inputs.${key})`);
-				// console.log(`"${inputs[key]}"`, key);
-			}
-			// console.log(unjoinedStatements);
-			eval(`if (${unjoinedStatements.join(" && ")}) returnArray.push(piece);`);
-		}
-		// console.log(returnArray)
-		return returnArray;
+	function matchFilter(data, filters) {
+		return data.filter((obj) => {
+			const keys = Object.keys(filters);
+			return keys.every((key) =>
+				obj[key].toLowerCase().includes(filters[key].toLowerCase())
+			);
+		});
 	}
+
 	return (
 		<>
 			<Header name={compName} logo={compLogo} slogan={compSlogan} />
@@ -150,8 +167,8 @@ const Sales = () => {
 					<input
 						type="text"
 						className="search-input"
-						name="cashier"
-						placeholder="Cajero"></input>
+						name="totalSale"
+						placeholder="Monto"></input>
 					{/* <input type="text" name="products" placeholder="Productos"></input> */}
 					<input
 						type="text"

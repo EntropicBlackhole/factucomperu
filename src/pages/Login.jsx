@@ -65,7 +65,7 @@ const Login = () => {
 				} else {
 					setErrorMessage(data.message);
 					setStatus(data.status);
-					// console.log(data.status);
+					// console.log(data.status);document.getElementById("modal").close();
 				}
 			})
 			.catch((error) => {

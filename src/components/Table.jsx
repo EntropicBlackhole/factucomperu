@@ -2,10 +2,11 @@ import ButtonIcon from "../components/ButtonIcon";
 // import { useState } from 'react';
 
 function Table(data) {
-	let tableData = data.data;	
+	let tableData = data.data;
 	// console.log(tableData)
 	data.type == "ventas";
 	if (data.type == "ventas") {
+		tableData = tableData.reverse();
 		return (
 			<table className="table">
 				<thead className="table-head">
@@ -50,7 +51,7 @@ function Table(data) {
 		return (
 			<table className="table">
 				<thead className="table-head">
-					<tr className="table-row" style={{'gridTemplateColumns': '1fr 1fr 1fr 1fr 1fr 1fr 1fr'}}>
+					<tr className="table-row" style={{ 'gridTemplateColumns': '1fr 1fr 1fr 1fr 1fr 1fr 1fr' }}>
 						<th className="table-header">Nombre</th>
 						<th className="table-header">Marca</th>
 						<th className="table-header">Precio</th>
@@ -93,6 +94,39 @@ function Table(data) {
 								<td className="table-data">{tableData[item].total}</td>
 								<td className="table-data">
 									<ButtonIcon name={`delete|${tableData[item].id}`} onClick={data.handleDelete} icon="./src/assets/icons/trash.svg" />
+								</td>
+							</tr>
+						);
+					})}
+				</tbody>
+			</table>
+		);
+	} else if (data.type == "productos") {
+		return (
+			<table className="table">
+				<thead className="table-head">
+					<tr
+						key="tablehead"
+						className="table-row"
+						style={{ "gridTemplateColumns": "1fr 1fr 1fr 1fr 1fr" }}>
+						<th className="table-header">Nombre</th>
+						<th className="table-header">Marca</th>
+						<th className="table-header">Modelo</th>
+						<th className="table-header">Precio</th>
+						<th className="table-header">Opciones</th>
+					</tr>
+				</thead>
+				<tbody className="table-body">
+					{tableData.map((item) => {
+						// console.log(item)
+						return (
+							<tr key={item.id} className="table-row" style={{ "gridTemplateColumns": "1fr 1fr 1fr 1fr 1fr" }}>
+								<td className="table-data">{item.name}</td>
+								<td className="table-data">{item.brand}</td>
+								<td className="table-data">{item.model}</td>
+								<td className="table-data">{item.sell_price}</td>
+								<td className="table-data">
+									<ButtonIcon icon="./src/assets/icons/trash.svg" />
 								</td>
 							</tr>
 						);

@@ -616,3 +616,51 @@ textarea {
 .autocomplete-search {
   width: 100%;
 }
+
+
+.create-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  /* gap: 2rem; */
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  background-color: var(--bg-secondary);
+}
+.create-form-input {
+  border-radius: 10px;
+  border: 1px solid var(--fg-primary);
+  font-size: 1.2rem;
+  padding: 0.4rem;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+.create-form-label {
+  display: flex;
+  font-size: 1rem;
+  /* margin: 0; */
+  margin-left: 0.4rem;
+  margin-right: 1rem;
+  /* padding: 0.4rem; */
+  width: 100%;
+  /* border: none; */
+  /* border-radius: 20px; */
+  /* background-color: var(--bg-primary); */
+}
+
+.create-product-buttons {
+  display: flex;
+  gap: .7rem;
+}
+
+.create-product-dialog-error-message {
+  color: red;
+  font-size: 0.7rem;
+  padding: 0;
+  margin: 0;
+  margin-left: 10px;
+  justify-content: start;
+  align-items: start;
+  text-align: start;  
+}

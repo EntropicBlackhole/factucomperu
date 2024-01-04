@@ -21,7 +21,7 @@ const Sell = () => {
 	const [note, setNote] = useState("");
 
 	useEffect(() => {
-		fetch("http://localhost:3000/sell", {
+		fetch("https://factucomperu.onrender.com/sell", {
 			method: "POST",
 			headers: {
 				Accept: "application/json",
@@ -48,14 +48,17 @@ const Sell = () => {
 					setCompName(data.comp.name);
 					setCompLogo(data.comp.logo);
 					setCompSlogan(data.comp.slogan);
-				
+
 					setProducts(reorganizeProductObject(data.products));
 
 					setSaleID(`V001-${data.sales.length + 1}`);
-					setDate(`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear().toString().substring(2, 4)}`)
+					setDate(
+						`${date.getDate()}/${date.getMonth() + 1}/${date
+							.getFullYear()
+							.toString()
+							.substring(2, 4)}`
+					);
 					setCashier(window.sessionStorage.getItem("username"));
-
-
 				} else {
 					console.log(data.message);
 				}
@@ -154,7 +157,6 @@ const Sell = () => {
 					<div className="sell-search-wrapper">
 						<ReactSearchAutocomplete
 							placeholder="Buscar..."
-
 							className="autocomplete-search"
 							items={products}
 							onSelect={handleOnSelect}
@@ -185,7 +187,6 @@ const Sell = () => {
 				discount: parseFloat(shownProducts[product].discount),
 			};
 			// let a = { "1": { "amt": 2, "unit_price": 180, "discount": 10 } }
-			
 		}
 		var pad = function (num) {
 			return ("00" + num).slice(-2);
@@ -204,7 +205,7 @@ const Sell = () => {
 			pad(date.getMinutes()) +
 			":" +
 			pad(date.getSeconds());
-		console.log(date)
+		console.log(date);
 		let saleContent = {
 			id: `${saleID}|${window.sessionStorage.getItem("comp_id")}`,
 			client: client,
@@ -216,28 +217,28 @@ const Sell = () => {
 		};
 		// console.log(saleContent)
 		// return
-			fetch("http://localhost:3000/sales", {
-				method: "POST",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-					Authorization: `${window.sessionStorage.getItem("token")}`,
-				},
-				body: JSON.stringify({
-					comp_id: window.sessionStorage.getItem("comp_id"),
-					saleID: saleID,
-					saleContent: saleContent,
-				}),
-			})
-				.then((response) => response.json())
-				.then((data) => {
-					if (data.success) {
-						//Place the sale pdf ready for printing
-						navigate("/comprobantes");
-					} else {
-						alert(data.message);
-					}
-				});
+		fetch("https://factucomperu.onrender.com/sales", {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+				Authorization: `${window.sessionStorage.getItem("token")}`,
+			},
+			body: JSON.stringify({
+				comp_id: window.sessionStorage.getItem("comp_id"),
+				saleID: saleID,
+				saleContent: saleContent,
+			}),
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.success) {
+					//Place the sale pdf ready for printing
+					navigate("/comprobantes");
+				} else {
+					alert(data.message);
+				}
+			});
 	}
 
 	function handleOnChange(e) {

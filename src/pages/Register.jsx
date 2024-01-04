@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from 'react';
+import { useState } from "react";
 
 const Register = () => {
-    const navigate = useNavigate();
-    const [errorMessage, setErrorMessage] = useState("");
+	const navigate = useNavigate();
+	const [errorMessage, setErrorMessage] = useState("");
 	return (
 		<>
 			<div className="register-wrapper">
@@ -19,7 +19,7 @@ const Register = () => {
 					<label className="register-label">
 						Correo del dueño de la empresa
 					</label>
-                    <input
+					<input
 						name="email"
 						type="email"
 						className="register-ownerEmail register-input email"
@@ -46,7 +46,7 @@ const Register = () => {
 						type="submit"
 						className="register-button register-input"
 						value="Crear Empresa"></input>
-				<p className="login-error-message">{errorMessage}</p>
+					<p className="login-error-message">{errorMessage}</p>
 				</form>
 				<p>
 					Buscando <Link to="/login">ingresar?</Link>
@@ -62,21 +62,21 @@ const Register = () => {
 		let compname = document.querySelector('[name="compname"]').value;
 		let username = document.querySelector('[name="username"]').value;
 		// console.log(email, password);
-		fetch("http://localhost:3000/register", {
+		fetch("https://factucomperu.onrender.com/register", {
 			method: "POST",
 			headers: {
 				Accept: "application/json",
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({ email, password, compname, username }),
 		})
 			.then((response) => response.json())
-            .then((data) => {
+			.then((data) => {
 				if (data.success) {
-                    navigate("/login");
-                } else {
-                    setErrorMessage(data.message);
-                }
+					navigate("/login");
+				} else {
+					setErrorMessage(data.message);
+				}
 			})
 			.catch((error) => {
 				console.error(error);

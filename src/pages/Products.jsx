@@ -15,7 +15,7 @@ const Products = () => {
 	const [compSlogan, setCompSlogan] = useState("");
 
 	useEffect(() => {
-		fetch("http://localhost:3000/products", {
+		fetch("https://factucomperu.onrender.com/products", {
 			method: "GET",
 			headers: {
 				Accept: "application/json",
@@ -100,9 +100,9 @@ const Products = () => {
 		});
 	}
 
-    function createProduct(e) {
-        e.preventDefault();
-        console.log(e)
+	function createProduct(e) {
+		e.preventDefault();
+		console.log(e);
 		let name = e.target[0].value;
 		let brand = e.target[1].value;
 		let model = e.target[2].value;
@@ -117,7 +117,7 @@ const Products = () => {
 			return setDialogErrorMessage("El precio de venta es invalido");
 		if (isNaN(stock))
 			return setDialogErrorMessage("La cantidad de stock es invalido");
-		fetch(`http://localhost:3000/products/${id}`, {
+		fetch(`https://factucomperu.onrender.com/products/${id}`, {
 			method: "POST",
 			headers: {
 				Accept: "application/json",
@@ -199,7 +199,10 @@ const Products = () => {
 			<Table data={data} type="productos" className="sales-table" />
 			<dialog id="modal">
 				<h2>Crear un producto (falta arreglar diseño aca)</h2>
-				<form id="create-product-form" className="create-form" onSubmit={createProduct}>
+				<form
+					id="create-product-form"
+					className="create-form"
+					onSubmit={createProduct}>
 					<label className="create-form-label" htmlFor="name">
 						Nombre
 					</label>
@@ -260,9 +263,7 @@ const Products = () => {
 						}}>
 						Cerrar
 					</button>
-					<button
-						type="submit"
-						form="create-product-form">
+					<button type="submit" form="create-product-form">
 						Crear
 					</button>
 					<p className="create-product-dialog-error-message">

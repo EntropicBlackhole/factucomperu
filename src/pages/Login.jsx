@@ -43,12 +43,12 @@ const Login = () => {
 		let email = document.querySelector('[name="email"]').value;
 		let password = document.querySelector('[name="password"]').value;
 		// console.log(email, password);
-		fetch("http://localhost:3000/login", {
+		fetch("https://factucomperu.onrender.com/login", {
 			method: "POST",
 			headers: {
 				Accept: "application/json",
 				"Content-Type": "application/json",
-				// 'Access-Control-Allow-Origin': 'http://localhost:3000/login',
+				// 'Access-Control-Allow-Origin': 'https://factucomperu.onrender.com/login',
 				// 'Access-Control-Allow-Credentials': 'true',
 			},
 			body: JSON.stringify({ email, password }),

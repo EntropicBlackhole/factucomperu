@@ -150,7 +150,7 @@ app.get("/dashboard", async (req, res) => {
 				return res
 					.status(401)
 					.json({ error: "TokenExpiredError", success: false });
-			if (!authData.comp_id)
+			if (authData && !authData.comp_id)
 				return res.status(403).json({
 					status: 403,
 					success: false,
@@ -585,4 +585,4 @@ app.delete("/users/:id", async (req, res) => {
 
 app.listen(3000);
 
-//http://localhost:3000/sales/V001-1?client=00000000&date=2023-11-12 20:22:35.840&cashier=Christopher&products={ "1": { "amt": 2, "unit_price": 180, "discount": 10 } }&note=SN 3133
+//https://factucomperu.onrender.com/sales/V001-1?client=00000000&date=2023-11-12 20:22:35.840&cashier=Christopher&products={ "1": { "amt": 2, "unit_price": 180, "discount": 10 } }&note=SN 3133

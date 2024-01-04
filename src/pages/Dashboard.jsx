@@ -11,8 +11,8 @@ import ButtonIcon from "../components/ButtonIcon";
 Chart.register(CategoryScale);
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-  
+	const navigate = useNavigate();
+
 	const [compName, setCompName] = useState("");
 	const [compLogo, setCompLogo] = useState("");
 	const [compSlogan, setCompSlogan] = useState("");
@@ -22,7 +22,7 @@ const Dashboard = () => {
 	const [totalSale, setTotalSale] = useState(0);
 
 	useEffect(() => {
-		fetch("http://localhost:3000/dashboard", {
+		fetch("https://factucomperu.onrender.com/dashboard", {
 			method: "GET",
 			headers: {
 				Accept: "application/json",
@@ -33,7 +33,11 @@ const Dashboard = () => {
 		})
 			.then((response) => response.json())
 			.then((data) => {
-				if (!data.success && (data.error == "TokenExpiredError" || data.error == "CompanyIDNotFound")) {
+				if (
+					!data.success &&
+					(data.error == "TokenExpiredError" ||
+						data.error == "CompanyIDNotFound")
+				) {
 					navigate("/login");
 				}
 				setCompName(data.comp.name);

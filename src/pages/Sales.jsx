@@ -16,7 +16,9 @@ const Sales = () => {
 
 	useEffect(() => {
 		fetch(
-			`http://localhost:3000/sales/${window.sessionStorage.getItem("comp_id")}`,
+			`https://factucomperu.onrender.com/sales/${window.sessionStorage.getItem(
+				"comp_id"
+			)}`,
 			{
 				method: "GET",
 				headers: {
@@ -100,9 +102,9 @@ const Sales = () => {
 
 				let date = new Date(data[info].date);
 
-				newObject.date = `${date.getMonth() < 10 ? "0" : ""}${
+				newObject.date = `${date.getDate()}/${date.getMonth() < 10 ? "0" : ""}${
 					date.getMonth() + 1
-				}/${date.getDate()}/${date.getFullYear()}`;
+				}/${date.getFullYear()}`;
 				newObject.client = data[info].client;
 				newObject.note = data[info].note;
 				let totalSale = 0;
